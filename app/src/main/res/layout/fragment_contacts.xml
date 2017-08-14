@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/common_actionbar"
+        layout="@layout/include_action_bar" />
+
+    <RelativeLayout
+        android:id="@+id/layout_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:orientation="vertical" >
+
+        <com.example.lenovo.uu.view.ClearEditText
+            android:id="@+id/et_msg_search"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="30.0dip"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="#f4f6f6"
+            android:drawableLeft="@drawable/icon_msg_search"
+            android:drawablePadding="10dp"
+            android:hint="搜索"
+            android:textSize="15.0dip"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:maxLines="1"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/et_msg_search"
+            android:layout_gravity="top"
+            android:background="#ffffff"
+            android:orientation="horizontal" >
+
+            <ListView
+                android:id="@+id/list_friends"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:cacheColorHint="#00000000"
+                android:scrollbars="none" />
+
+            <TextView
+                android:id="@+id/dialog"
+                android:layout_width="80.0dip"
+                android:layout_height="80.0dip"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:background="@drawable/v2_gallery_contacts_dialog_background"
+                android:gravity="center"
+                android:padding="5dip"
+                android:textColor="@color/base_actionbar_bg"
+                android:textSize="35.0dip"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+        <com.example.lenovo.uu.view.MyLetterView
+            android:id="@+id/right_letter"
+            android:layout_width="25dip"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="#ffffff" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9F9FB"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/common_actionbar"
+        layout="@layout/include_action_bar" />
+
+    <RelativeLayout
+        android:layout_marginTop="20dp"
+        android:background="#ffffff"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="300dp"
+        android:layout_height="300dp">
+
+        <ImageView
+            android:id="@+id/my_two_code"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_width="250dp"
+            android:layout_height="250dp" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_gravity="center_horizontal"
+        android:background="#F0F0F0"
+        android:layout_width="300dp"
+        android:layout_height="80dp">
+
+        <ImageView
+            android:id="@+id/my_head"
+            style="@style/Smile.ImageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/head" />
+
+        <TextView
+            android:id="@+id/my_name"
+            android:text="yangmingjia"
+            android:textSize="18sp"
+            android:textColor="#000000"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@+id/my_head"/>
+
+        <TextView
+            android:id="@+id/add_me"
+            android:text="@string/add_me_two"
+            android:textSize="14sp"
+            android:textColor="#848484"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="46dp"
+            android:layout_toRightOf="@+id/my_head"/>
+
+        <ImageView
+            android:id="@+id/create_bar_code"
+            style="@style/Smile.ImageView"
+            android:layout_alignParentRight="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/bar_code_icon" />
+
+        <ImageView
+            android:id="@+id/create_two_code"
+            style="@style/Smile.ImageView"
+            android:layout_alignParentRight="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:visibility="gone"
+            android:src="@drawable/two_code_icon" />
+
+    </RelativeLayout>
+
+</LinearLayout>
