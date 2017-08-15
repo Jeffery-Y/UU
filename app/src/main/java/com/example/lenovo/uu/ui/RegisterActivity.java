@@ -3,11 +3,15 @@ package com.example.lenovo.uu.ui;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Layout;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import cn.bmob.im.bean.BmobChatUser;
 import cn.bmob.im.util.BmobLog;
 import cn.bmob.v3.BmobInstallation;
@@ -18,8 +22,8 @@ import com.example.lenovo.uu.bean.User;
 import com.example.lenovo.uu.config.BmobConstants;
 import com.example.lenovo.uu.util.CommonUtils;
 
-public class RegisterActivity extends BaseActivity {
-
+public class RegisterActivity extends BaseActivity implements View.OnClickListener{
+	private String phonenumber;
 	Button btn_register;
 	EditText et_username, et_password, et_email;
 	BmobChatUser currentUser;
@@ -32,21 +36,26 @@ public class RegisterActivity extends BaseActivity {
 
 		initTopBarForLeft("注册");
 
+		phonenumber = getIntent().getStringExtra("phonenumber");
 		et_username = (EditText) findViewById(R.id.et_username);
 		et_password = (EditText) findViewById(R.id.et_password);
 		et_email = (EditText) findViewById(R.id.et_email);
 
 		btn_register = (Button) findViewById(R.id.btn_register);
-		btn_register.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				register();
-			}
-		});
+		btn_register.setOnClickListener(this);
 	}
-	
+
+	@Override
+	public void onClick(View v){
+		switch (v.getId()){
+			case R.id.btn_register:
+				register();
+				break;
+			default:
+				break;
+		}
+	}
+
 	private void register(){
 		String name = et_username.getText().toString();
 		String password = et_password.getText().toString();
@@ -89,6 +98,8 @@ public class RegisterActivity extends BaseActivity {
 			@Override
 			public void onSuccess() {
 				// TODO Auto-generated method stub
+//				bu.setMobilePhoneNumber(phonenumber);
+//				bu.setMobilePhoneNumberVerified(true);
 				progress.dismiss();
 				ShowToast("注册成功");
 				// 将设备与username进行绑定
@@ -97,6 +108,9 @@ public class RegisterActivity extends BaseActivity {
 				updateUserLocation();
 				//发广播通知登陆页面退出
 				sendBroadcast(new Intent(BmobConstants.ACTION_REGISTER_SUCCESS_FINISH));
+				Intent intent_result = new Intent();
+				intent_result.putExtra("result", "succeed");
+				setResult(RESULT_OK, intent_result);
 				// 启动主页
 				Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
 				startActivity(intent);
@@ -112,6 +126,13 @@ public class RegisterActivity extends BaseActivity {
 				progress.dismiss();
 			}
 		});
+	}
+
+	@Override
+	public void onBackPressed(){
+		Intent intent_result = new Intent();
+		intent_result.putExtra("result", "failed");
+		setResult(RESULT_OK, intent_result);
 	}
 
 }
