@@ -26,7 +26,7 @@ import com.example.lenovo.uu.config.BmobConstants;
 import com.example.lenovo.uu.util.CommonUtils;
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener{
-	private String phonenumber;
+//	private String phonenumber;
 	Button btn_register;
 	EditText et_username, et_password, et_email;
 	BmobChatUser currentUser;
@@ -40,7 +40,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 		initTopBarForLeft("注册");
 
 //		phonenumber = getIntent().getStringExtra("phonenumber");
-		phonenumber = "18640366542";
+//		phonenumber = "18640366542";
 		et_username = (EditText) findViewById(R.id.et_username);
 		et_password = (EditText) findViewById(R.id.et_password);
 		et_email = (EditText) findViewById(R.id.et_email);
@@ -110,9 +110,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 				updateUserLocation();
 				//发广播通知登陆页面退出
 				sendBroadcast(new Intent(BmobConstants.ACTION_REGISTER_SUCCESS_FINISH));
-				Intent intent_result = new Intent();
+				/*Intent intent_result = new Intent();
 				intent_result.putExtra("result", "succeed");
-				setResult(RESULT_OK, intent_result);
+				setResult(RESULT_OK, intent_result);*/
 				// 启动主页
 				Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
 				startActivity(intent);
@@ -130,11 +130,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 		});
 	}
 
-	@Override
+	/*@Override
 	public void onBackPressed(){
 		Intent intent_result = new Intent();
 		intent_result.putExtra("result", "failed");
 		setResult(RESULT_OK, intent_result);
-	}
+	}*/
 
 }

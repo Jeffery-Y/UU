@@ -44,7 +44,7 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 		setContentView(R.layout.activity_register_inphone);
 //		context = getApplicationContext();
 //		Bmob.initialize(this, Config.applicationId);
-		BmobSMS.initialize(this, Config.applicationId, new MySMSCodeListener());
+		BmobSMS.initialize(RegisterInPhone.this, Config.applicationId, new MySMSCodeListener());
 		initTopBarForLeft("注册");
 		initViews();
 	}

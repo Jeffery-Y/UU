@@ -69,7 +69,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if (v == btn_register) {
-			Intent intent = new Intent(LoginActivity.this,	RegisterActivity.class);
+			Intent intent = new Intent(LoginActivity.this,	RegisterInPhone.class);
 			startActivity(intent);
 		} else {
 			boolean isNetConnected = CommonUtils.isNetworkAvailable(this);

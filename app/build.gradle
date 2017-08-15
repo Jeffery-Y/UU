@@ -33,7 +33,7 @@ dependencies {
 //    compile 'com.gyf.barlibrary:barlibrary:2.2.7'
 //    compile 'com.github.XuDaojie:QRCode-Android:v0.4.2'
 //    compile 'cn.yipianfengye.android:zxing-library:2.2'
-//    compile files('libs/BmobSMS_V1.2.2_20170303.jar')
+    compile files('libs/BmobSMS_V1.2.2_20170303.jar')
 //    compile files('libs/okhttp-3.2.0.jar')
 //    compile files('libs/okio-1.7.0.jar')
 //    compile files('libs/butterknife-6.1.0.jar')
@@ -41,14 +41,14 @@ dependencies {
     compile 'com.android.support:support-v4:18.0.0'
     compile files('libs/baidumapapi_v3_0_0.jar')
     compile files('libs/BmobIM_V1.1.4beta_1027.jar')
-//    compile files('libs/BmobSDK_V3.2.5_1027.jar')
+    compile files('libs/BmobSDK_V3.2.5_1027.jar')
     //compile files('libs/BmobIM_V1.1.9beta_20150820.jar')
     //compile files('libs/BmobSDK_V3.4.3_0820.jar')
     compile files('libs/locSDK_4.2.jar')
     compile files('libs/photoview-library-1.2.2.jar')
     compile files('libs/universal-image-loader-1.9.2_sources.jar')
 
-    compile files('libs/BmobSDK_V3.3.9_0612.jar')
+//    compile files('libs/BmobSDK_V3.3.9_0612.jar')
 
 //    compile 'com.gyf.barlibrary:barlibrary:2.2.7'
 //    compile 'com.android.support:appcompat-v7:25.3.1'

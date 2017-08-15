@@ -30,11 +30,11 @@
     <LinearLayout style="@style/Register_Input" >
 
         <TextView
-            android:layout_width="90dp"
+            android:layout_width="95dp"
             android:layout_height="match_parent"
             android:textColor="@color/color_text_gray"
             android:textSize="18sp"
-            android:gravity="center_vertical"
+            android:gravity="center_vertical|right"
             android:paddingLeft="10dp"
             android:text="国家/地区" />
 
@@ -59,7 +59,7 @@
     <LinearLayout style="@style/Register_Input" >
 
         <TextView
-            android:layout_width="90dp"
+            android:layout_width="95dp"
             android:layout_height="match_parent"
             android:textColor="@color/color_text_gray"
             android:textSize="18sp"
@@ -91,7 +91,7 @@
         android:id="@+id/register_messge">
 
         <TextView
-            android:layout_width="90dp"
+            android:layout_width="95dp"
             android:layout_height="match_parent"
             android:textColor="@color/color_text_gray"
             android:textSize="18sp"
