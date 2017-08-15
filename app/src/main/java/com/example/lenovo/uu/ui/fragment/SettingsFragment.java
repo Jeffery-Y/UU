@@ -11,13 +11,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import cn.bmob.im.BmobUserManager;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.listener.UpdateListener;
 
 import com.example.lenovo.uu.CustomApplcation;
 import com.example.lenovo.uu.R;
+import com.example.lenovo.uu.bean.User;
 import com.example.lenovo.uu.ui.BlackListActivity;
 import com.example.lenovo.uu.ui.FragmentBase;
 import com.example.lenovo.uu.ui.LoginActivity;
+import com.example.lenovo.uu.ui.RegisterActivity;
 import com.example.lenovo.uu.ui.SetMyInfoActivity;
 import com.example.lenovo.uu.util.SharePreferenceUtil;
 import com.suke.widget.SwitchButton;
@@ -204,6 +210,8 @@ public class SettingsFragment extends FragmentBase implements OnClickListener{
 			}
 			break;
 
+			default:
+				break;
 		}
 	}
 

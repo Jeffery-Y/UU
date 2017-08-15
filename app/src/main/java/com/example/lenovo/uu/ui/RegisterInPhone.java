@@ -34,7 +34,7 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 	EditText et_country, et_phone, et_ver_code;
 	Button btn_register_next, btn_send_ver_message;
 
-	Context context;
+//	Context context;
 	String phoneNumber = "";
 	int smsId = 123;
 
@@ -42,8 +42,9 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register_inphone);
-		context = getApplicationContext();
-		BmobSMS.initialize(context, Config.applicationId, new MySMSCodeListener());
+//		context = getApplicationContext();
+//		Bmob.initialize(this, Config.applicationId);
+		BmobSMS.initialize(this, Config.applicationId, new MySMSCodeListener());
 		initTopBarForLeft("注册");
 		initViews();
 	}
@@ -120,7 +121,7 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 				btn_send_ver_message.setEnabled(false);
 				phoneNumber = et_phone.getText().toString();
 				if(phoneNumber.length() == 11){
-					BmobSMS.requestSMSCode(context, phoneNumber, "UU", new RequestSMSCodeListener() {
+					BmobSMS.requestSMSCode(this, phoneNumber, "UU", new RequestSMSCodeListener() {
 
 						@Override
 						public void done(Integer smsId, BmobException ex) {
@@ -156,7 +157,7 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 				});
 				break;*/
 			case R.id.btn_register_next:
-				BmobSMS.verifySmsCode(context, phoneNumber, et_ver_code.getText().toString().trim(), new VerifySMSCodeListener() {
+				BmobSMS.verifySmsCode(this, phoneNumber, et_ver_code.getText().toString().trim(), new VerifySMSCodeListener() {
 
 					@Override
 					public void done(BmobException ex) {
@@ -199,7 +200,7 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 	}
 
 	public void toast(String string){
-		Toast.makeText(context, string, Toast.LENGTH_LONG).show();
+		Toast.makeText(this, string, Toast.LENGTH_LONG).show();
 	}
 
 	class MySMSCodeListener implements SMSCodeListener {

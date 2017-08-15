@@ -11,11 +11,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import cn.bmob.im.bean.BmobChatUser;
 import cn.bmob.im.util.BmobLog;
 import cn.bmob.v3.BmobInstallation;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 import com.example.lenovo.uu.R;
 import com.example.lenovo.uu.bean.User;
@@ -36,7 +39,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
 		initTopBarForLeft("注册");
 
-		phonenumber = getIntent().getStringExtra("phonenumber");
+//		phonenumber = getIntent().getStringExtra("phonenumber");
+		phonenumber = "18640366542";
 		et_username = (EditText) findViewById(R.id.et_username);
 		et_password = (EditText) findViewById(R.id.et_password);
 		et_email = (EditText) findViewById(R.id.et_email);
@@ -98,8 +102,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 			@Override
 			public void onSuccess() {
 				// TODO Auto-generated method stub
-//				bu.setMobilePhoneNumber(phonenumber);
-//				bu.setMobilePhoneNumberVerified(true);
 				progress.dismiss();
 				ShowToast("注册成功");
 				// 将设备与username进行绑定

@@ -36,6 +36,7 @@ import cn.bmob.im.BmobChatManager;
 import cn.bmob.im.config.BmobConfig;
 import cn.bmob.im.db.BmobDB;
 import cn.bmob.im.util.BmobLog;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.PushListener;
@@ -46,6 +47,7 @@ import com.example.lenovo.uu.CustomApplcation;
 import com.example.lenovo.uu.R;
 import com.example.lenovo.uu.bean.User;
 import com.example.lenovo.uu.config.BmobConstants;
+import com.example.lenovo.uu.ui.fragment.SettingsFragment;
 import com.example.lenovo.uu.util.CollectionUtils;
 import com.example.lenovo.uu.util.ImageLoadOptions;
 import com.example.lenovo.uu.util.PhotoUtil;
@@ -63,7 +65,7 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 	ImageView iv_set_avator, iv_arraw, iv_nickarraw;
 	LinearLayout layout_all;
 
-	Button btn_chat, btn_back, btn_delete_friend, btn_add_friend;
+	Button btn_chat, btn_back, btn_delete_friend, btn_add_friend, bind_phone;
 	RelativeLayout layout_head, layout_nick, layout_gender, layout_black_tips, layout_two_code;
 
 	String from = "";
@@ -104,6 +106,7 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 		btn_back = (Button) findViewById(R.id.btn_back);
 		btn_delete_friend = (Button)findViewById(R.id.btn_delete);
 		btn_add_friend = (Button) findViewById(R.id.btn_add_friend);
+		bind_phone = (Button)findViewById(R.id.bind_phone);
 		btn_add_friend.setEnabled(false);
 		btn_chat.setEnabled(false);
 		btn_back.setEnabled(false);
@@ -119,6 +122,7 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 			btn_delete_friend.setVisibility(View.GONE);
 			btn_chat.setVisibility(View.GONE);
 			btn_add_friend.setVisibility(View.GONE);
+			bind_phone.setOnClickListener(this);
 		} else {
 			initTopBarForLeft("详细资料");
 			iv_nickarraw.setVisibility(View.INVISIBLE);
@@ -284,6 +288,28 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 				break;
 			case R.id.btn_add_friend:// 添加好友
 				addFriend();
+				break;
+			case R.id.bind_phone:
+				User bu =new User();
+				bu.setEmail("908210478@qq.com");
+				bu.setEmailVerified(true);
+				bu.setMobilePhoneNumber("18640366542");
+				bu.setMobilePhoneNumberVerified(true);
+				User cur = BmobUser.getCurrentUser(this,User.class);
+				bu.update(this, cur.getObjectId(),new UpdateListener() {
+
+					@Override
+					public void onSuccess() {
+						// TODO Auto-generated method stub
+						ShowToast("手机号码绑定成功");
+					}
+
+					@Override
+					public void onFailure(int arg0, String arg1) {
+						// TODO Auto-generated method stub
+						ShowToast("手机号码绑定失败："+arg0+"-"+arg1);
+					}
+				});
 				break;
 		}
 	}

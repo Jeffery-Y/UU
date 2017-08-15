@@ -191,6 +191,16 @@
         android:background="@color/base_color_text_gray" />
 
     <Button
+        android:id="@+id/bind_phone"
+        style="@style/Smile.Button.theme"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="绑定手机" />
+
+    <Button
         android:id="@+id/btn_add_friend"
         style="@style/Smile.Button.theme"
         android:layout_width="match_parent"
