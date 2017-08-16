@@ -61,12 +61,12 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 @SuppressLint("SimpleDateFormat")
 public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 
-	TextView tv_set_name, tv_set_nick, tv_set_gender;
-	ImageView iv_set_avator, iv_arraw, iv_nickarraw;
+	TextView tv_set_name, tv_set_nick, tv_set_phone, tv_set_email, tv_set_gender;
+	ImageView iv_set_avator, iv_arrow, iv_nick_arrow, iv_email_arrow, iv_phone_arrow;
 	LinearLayout layout_all;
 
 	Button btn_chat, btn_back, btn_delete_friend, btn_add_friend;
-	RelativeLayout layout_head, layout_nick, layout_gender, layout_black_tips, layout_two_code;
+	RelativeLayout layout_head, layout_nick, layout_email, layout_phone, layout_gender, layout_black_tips, layout_two_code;
 
 	String from = "";
 	String username = "";
@@ -92,12 +92,18 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 	private void initView() {
 		layout_all = (LinearLayout) findViewById(R.id.layout_all);
 		iv_set_avator = (ImageView) findViewById(R.id.iv_set_avator);
-		iv_arraw = (ImageView) findViewById(R.id.iv_arraw);
-		iv_nickarraw = (ImageView) findViewById(R.id.iv_nickarraw);
+		iv_arrow = (ImageView) findViewById(R.id.iv_arrow);
+		iv_nick_arrow = (ImageView) findViewById(R.id.iv_nick_arrow);
+		iv_email_arrow = (ImageView) findViewById(R.id.iv_email_arrow);
+		iv_phone_arrow = (ImageView) findViewById(R.id.iv_phone_arrow);
 		tv_set_name = (TextView) findViewById(R.id.tv_set_name);
 		tv_set_nick = (TextView) findViewById(R.id.tv_set_nick);
+		tv_set_email = (TextView) findViewById(R.id.tv_set_email);
+		tv_set_phone = (TextView) findViewById(R.id.tv_set_phone);
 		layout_head = (RelativeLayout) findViewById(R.id.layout_head);
 		layout_nick = (RelativeLayout) findViewById(R.id.layout_nick);
+		layout_email = (RelativeLayout) findViewById(R.id.layout_email);
+		layout_phone = (RelativeLayout) findViewById(R.id.layout_phone);
 		layout_gender = (RelativeLayout) findViewById(R.id.layout_gender);
 		layout_two_code = (RelativeLayout) findViewById(R.id.layout_two_code);
 		// 黑名单提示语
@@ -115,17 +121,23 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 			initTopBarForLeft("个人资料");
 			layout_head.setOnClickListener(this);
 			layout_nick.setOnClickListener(this);
+			layout_email.setOnClickListener(this);
+			layout_phone.setOnClickListener(this);
 			layout_gender.setOnClickListener(this);
-			iv_nickarraw.setVisibility(View.VISIBLE);
-			iv_arraw.setVisibility(View.VISIBLE);
+			iv_nick_arrow.setVisibility(View.VISIBLE);
+			iv_arrow.setVisibility(View.VISIBLE);
+			iv_email_arrow.setVisibility(View.VISIBLE);
+			iv_phone_arrow.setVisibility(View.VISIBLE);
 			btn_back.setVisibility(View.GONE);
 			btn_delete_friend.setVisibility(View.GONE);
 			btn_chat.setVisibility(View.GONE);
 			btn_add_friend.setVisibility(View.GONE);
 		} else {
 			initTopBarForLeft("详细资料");
-			iv_nickarraw.setVisibility(View.INVISIBLE);
-			iv_arraw.setVisibility(View.INVISIBLE);
+			iv_phone_arrow.setVisibility(View.INVISIBLE);
+			iv_email_arrow.setVisibility(View.INVISIBLE);
+			iv_nick_arrow.setVisibility(View.INVISIBLE);
+			iv_arrow.setVisibility(View.INVISIBLE);
 			//不管对方是不是你的好友，均可以发送消息--BmobIM_V1.1.2修改
 			btn_chat.setVisibility(View.VISIBLE);
 			btn_chat.setOnClickListener(this);
@@ -214,6 +226,8 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 		refreshAvatar(user.getAvatar());
 		tv_set_name.setText(user.getUsername());
 		tv_set_nick.setText(user.getNick());
+		tv_set_phone.setText(user.getMobilePhoneNumber());
+		tv_set_email.setText(user.getEmail());
 		tv_set_gender.setText(user.getSex() == true ? "男" : "女");
 		layout_two_code.setVisibility(View.VISIBLE);
 		layout_two_code.setOnClickListener(this);
@@ -269,7 +283,19 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 				showAvatarPop();
 				break;
 			case R.id.layout_nick:
-				startAnimActivity(UpdateInfoActivity.class);
+				Intent intent_nick = new Intent(this, UpdateInfoActivity.class);
+				intent_nick.putExtra("layout", "昵称");
+				startAnimActivity(intent_nick);
+//				startAnimActivity(UpdateInfoActivity.class);
+				break;
+			case R.id.layout_email:
+				Intent intent_email = new Intent(this, UpdateInfoActivity.class);
+				intent_email.putExtra("layout", "邮箱");
+				startAnimActivity(intent_email);
+				break;
+			case R.id.layout_phone:
+				Intent intent_phone = new Intent(this, UpdateInPhone.class);
+				startAnimActivity(intent_phone);
 				break;
 			case R.id.layout_gender:// 性别
 				showSexChooseDialog();
@@ -623,7 +649,7 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 
 	private void uploadAvatar() {
 		BmobLog.i("头像地址：" + filePath);//////////////
-		final BmobFile bmobFile = new BmobFile(new File(filePath));/////////////////
+		final BmobFile bmobFile = new BmobFile(new File(filePath));
 		bmobFile.upload(this, new UploadFileListener() {
 
 			@Override

@@ -152,6 +152,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 		});
 	}
 
+
 /*	@Override
 	public void onBackPressed(){
 		Intent intent_result = new Intent();
