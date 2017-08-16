@@ -23,7 +23,8 @@
             android:fadingEdgeLength="0dp"
             android:fastScrollEnabled="true"
             android:listSelector="@color/transparent"
-            android:paddingBottom="10dp"
+            android:paddingBottom="15dp"
+            android:clipToPadding="false"
             android:transcriptMode="alwaysScroll" />
 
         <RelativeLayout

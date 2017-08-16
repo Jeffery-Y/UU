@@ -26,7 +26,7 @@ import com.example.lenovo.uu.util.CommonUtils;
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener{
 	private String phonenumber;
-	Button btn_register;
+	Button btn_register, registr_in_back;
 	EditText et_username, et_password, et_email;
 	BmobChatUser currentUser;
 
@@ -36,7 +36,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);
 
-		initTopBarForLeft("注册");
+//		initTopBarForLeft("注册");
 
 		phonenumber = getIntent().getStringExtra("phonenumber");
 //		phonenumber = "18640366542";
@@ -46,6 +46,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
 		btn_register = (Button) findViewById(R.id.btn_register);
 		btn_register.setOnClickListener(this);
+		registr_in_back = (Button) findViewById(R.id.btn_register);
+		registr_in_back.setOnClickListener(this);
 	}
 
 	@Override
@@ -53,6 +55,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 		switch (v.getId()){
 			case R.id.btn_register:
 				register();
+				break;
+			case R.id.registr_in_back:
+				finish();
 				break;
 			default:
 				break;

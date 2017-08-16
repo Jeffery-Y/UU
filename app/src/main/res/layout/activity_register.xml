@@ -6,9 +6,13 @@
     android:background="#ffffffff"
     android:orientation="vertical" >
 
-    <include
-        android:id="@+id/common_actionbar"
-        layout="@layout/include_action_bar" />
+    <Button
+        android:id="@+id/registr_in_back"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="12dp"
+        android:background="@drawable/title_back_button_gray"
+        android:layout_width="50dp"
+        android:layout_height="20dp" />
 
     <TextView
         android:id="@+id/register_account_hint_text"
@@ -17,7 +21,7 @@
         android:textColor="@color/base_color_text_black"
         android:textSize="40sp"
         android:layout_marginLeft="@dimen/register_margin_rl"
-        android:layout_marginTop="@dimen/register_margin_rl"
+        android:layout_marginTop="18dp"
         android:text="设置账户与密码" />
     <TextView
         android:layout_width="wrap_content"
