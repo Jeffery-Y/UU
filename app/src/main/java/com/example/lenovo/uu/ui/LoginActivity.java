@@ -29,7 +29,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
 	EditText et_username, et_password;
 	Button btn_login;
-	TextView btn_register;
+	TextView btn_register, btn_login_by_phone;
 	BmobChatUser currentUser;
 
 	private MyBroadcastReceiver receiver = new MyBroadcastReceiver();
@@ -50,8 +50,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		et_username = (EditText) findViewById(R.id.et_username);
 		et_password = (EditText) findViewById(R.id.et_password);
 		btn_login = (Button) findViewById(R.id.btn_login);
+		btn_login_by_phone = (TextView) findViewById(R.id.btn_login_by_phone);
 		btn_register = (TextView) findViewById(R.id.btn_register);
 		btn_login.setOnClickListener(this);
+		btn_login_by_phone.setOnClickListener(this);
 		btn_register.setOnClickListener(this);
 	}
 
@@ -68,16 +70,27 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	
 	@Override
 	public void onClick(View v) {
-		if (v == btn_register) {
-			Intent intent = new Intent(LoginActivity.this,	RegisterInPhone.class);
-			startActivity(intent);
-		} else {
-			boolean isNetConnected = CommonUtils.isNetworkAvailable(this);
-			if(!isNetConnected){
-				ShowToast(R.string.network_tips);
-				return;
-			}
-			login();
+		switch (v.getId()){
+			case R.id.btn_register:
+				Intent intent = new Intent(LoginActivity.this,	RegisterInPhone.class);
+				intent.putExtra("from", "register");
+				startActivity(intent);
+				break;
+			case R.id.btn_login:
+				boolean isNetConnected = CommonUtils.isNetworkAvailable(this);
+				if(!isNetConnected){
+					ShowToast(R.string.network_tips);
+					return;
+				}
+				login();
+				break;
+			case R.id.btn_login_by_phone:
+				Intent intent2 = new Intent(LoginActivity.this, RegisterInPhone.class);
+				intent2.putExtra("from", "login");
+				startActivity(intent2);
+				break;
+			default:
+				break;
 		}
 	}
 	

@@ -1,10 +1,12 @@
 package com.example.lenovo.uu.ui;
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -28,6 +30,8 @@ import cn.bmob.newsmssdk.listener.SMSCodeListener;
 import cn.bmob.newsmssdk.listener.VerifySMSCodeListener;
 import cn.bmob.v3.listener.UpdateListener;
 
+import static com.example.lenovo.uu.R.id.progress;
+
 public class UpdateInPhone extends ActivityBase implements OnClickListener{
 
 	LinearLayout register_messge, register_message_hint;
@@ -38,8 +42,9 @@ public class UpdateInPhone extends ActivityBase implements OnClickListener{
 //	Context context;
 	String phoneNumber = "";
 	int smsId = 123;
-
 	private boolean bind_or_cancel;
+
+	MyCountTimer timer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +53,7 @@ public class UpdateInPhone extends ActivityBase implements OnClickListener{
 		final User u = userManager.getCurrentUser(User.class);
 		initViews();
 
-		if(u.getMobilePhoneNumber().isEmpty()){
+		if(u.getMobilePhoneNumber() == null || u.getMobilePhoneNumber().isEmpty()){
 			bind_or_cancel = true;
 			initTopBarForLeft("绑定手机");
 			register_hint_text.setText("绑定手机号码验证");
@@ -115,6 +120,8 @@ public class UpdateInPhone extends ActivityBase implements OnClickListener{
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.btn_send_ver_message:
+				timer = new MyCountTimer(60000, 1000);
+				timer.start();
 				et_ver_code.requestFocus();
 				btn_send_ver_message.setEnabled(false);
 				phoneNumber = et_phone.getText().toString();
@@ -184,10 +191,15 @@ public class UpdateInPhone extends ActivityBase implements OnClickListener{
 				});
 				break;*/
 			case R.id.btn_register_next:
+				final ProgressDialog progress = new ProgressDialog(UpdateInPhone.this);
+				progress.setMessage("正在验证短信验证码...");
+				progress.setCanceledOnTouchOutside(false);
+				progress.show();
 				BmobSMS.verifySmsCode(this, phoneNumber, et_ver_code.getText().toString().trim(), new VerifySMSCodeListener() {
 
 					@Override
 					public void done(BmobException ex) {
+						progress.dismiss();
 						if(ex == null){
 							toast("verify ok ");
 							if(bind_or_cancel){
@@ -235,7 +247,6 @@ public class UpdateInPhone extends ActivityBase implements OnClickListener{
 		user.setMobilePhoneNumber(phoneNumber);
 		user.setMobilePhoneNumberVerified(true);
 		user.update(this, new UpdateListener() {
-
 			@Override
 			public void onSuccess() {
 				// TODO Auto-generated method stub
@@ -252,10 +263,29 @@ public class UpdateInPhone extends ActivityBase implements OnClickListener{
 		});
 	}
 
+	class MyCountTimer extends CountDownTimer {
+
+		public MyCountTimer(long millisInFuture, long countDownInterval) {
+			super(millisInFuture, countDownInterval);
+			btn_send_ver_message.setEnabled(false);
+		}
+		@Override
+		public void onTick(long millisUntilFinished) {
+			btn_send_ver_message.setText((millisUntilFinished / 1000) +"秒后重发");
+		}
+		@Override
+		public void onFinish() {
+			btn_send_ver_message.setText("发送验证码");
+			btn_send_ver_message.setEnabled(true);
+		}
+	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		if(timer!=null){
+			timer.cancel();
+		}
 	}
 
 	public void toast(String string){

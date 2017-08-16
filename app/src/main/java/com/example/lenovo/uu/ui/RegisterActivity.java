@@ -25,7 +25,7 @@ import com.example.lenovo.uu.config.BmobConstants;
 import com.example.lenovo.uu.util.CommonUtils;
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener{
-	private String phonenumber;
+	private String phonenumber = "";
 	Button btn_register, registr_in_back;
 	EditText et_username, et_password, et_email;
 	BmobChatUser currentUser;

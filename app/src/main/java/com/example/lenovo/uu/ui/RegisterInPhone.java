@@ -1,11 +1,13 @@
 package com.example.lenovo.uu.ui;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lenovo.uu.R;
+import com.example.lenovo.uu.bean.User;
 import com.example.lenovo.uu.config.BmobConstants;
 import com.example.lenovo.uu.config.Config;
 
@@ -30,6 +33,8 @@ import cn.bmob.newsmssdk.listener.RequestSMSCodeListener;
 import cn.bmob.newsmssdk.listener.SMSCodeListener;
 import cn.bmob.newsmssdk.listener.VerifySMSCodeListener;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.listener.LogInListener;
 
 public class RegisterInPhone extends BaseActivity implements OnClickListener{
 
@@ -41,18 +46,25 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 	Button btn_register_next, btn_send_ver_message, registr_in_back;
 
 //	Context context;
+	String from = "";
 	String phoneNumber = "";
 	int smsId = 123;
+	RegisterInPhone.MyCountTimer timer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register_inphone);
+
 //		context = getApplicationContext();
 //		Bmob.initialize(this, Config.applicationId);
 		BmobSMS.initialize(RegisterInPhone.this, Config.applicationId, new MySMSCodeListener());
 //		initTopBarForLeft("注册");
 		initViews();
+		from = getIntent().getStringExtra("from");//login and register
+		if(from.equals("login")){
+			btn_register_next.setText("验证登录");
+		}
 		//注册退出广播
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(BmobConstants.ACTION_REGISTER_SUCCESS_FINISH);
@@ -111,6 +123,8 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 				finish();
 				break;
 			case R.id.btn_send_ver_message:
+				timer = new RegisterInPhone.MyCountTimer(60000, 1000);
+				timer.start();
 				et_ver_code.requestFocus();
 				btn_send_ver_message.setEnabled(false);
 				phoneNumber = et_phone.getText().toString();
@@ -165,44 +179,76 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 					btn_send_ver_message.setEnabled(true);
 				}
 				break;
-			/*case R.id.btn_register_next:
-				BmobSMS.querySmsState(context, smsId, new QuerySMSStateListener() {
-
-					@Override
-					public void done(BmobSmsState state, BmobException ex) {
-						if(ex == null){
-							toast("getSmsState" + state.getSmsState() +"getVerifyState "+state.getVerifyState());
-
-						}else {
-							toast(ex.toString());
-						}
-					}
-				});
-				break;*/
 			case R.id.btn_register_next:
-				BmobSMS.verifySmsCode(this, phoneNumber, et_ver_code.getText().toString().trim(), new VerifySMSCodeListener() {
+				final ProgressDialog progress = new ProgressDialog(RegisterInPhone.this);
+				progress.setMessage("正在验证短信验证码...");
+				progress.setCanceledOnTouchOutside(false);
+				progress.show();
+				if(from.equals("login")){
+					BmobUser.signOrLoginByMobilePhone(RegisterInPhone.this,phoneNumber,
+							et_ver_code.getText().toString().trim(), new LogInListener<User>() {
 
-					@Override
-					public void done(BmobException ex) {
-						if(ex == null){
-							toast("verify ok ");
-							Intent intent = new Intent(RegisterInPhone.this,RegisterActivity.class);
-							intent.putExtra("phonenumber", phoneNumber);
-							startActivity(intent);
-						}else {
-							toast(ex.toString());
+								@Override
+								public void done(User user, cn.bmob.v3.exception.BmobException ex) {
+									// TODO Auto-generated method stub
+									progress.dismiss();
+									if(ex==null){
+										toast("登录成功");
+										//发广播通知登陆页面退出
+										sendBroadcast(new Intent(BmobConstants.ACTION_REGISTER_SUCCESS_FINISH));
+										Intent intent = new Intent(RegisterInPhone.this,MainActivity.class);
+										startActivity(intent);
+										finish();
+									}else{
+										toast("登录失败：code="+ex.getErrorCode()+"，错误描述："+ex.getLocalizedMessage());
+									}
+								}
+							});
+				} else if(from.equals("registr")){
+					BmobSMS.verifySmsCode(this, phoneNumber, et_ver_code.getText().toString().trim(), new VerifySMSCodeListener() {
+
+						@Override
+						public void done(BmobException ex) {
+							if(ex == null){
+								toast("手机验证通过");
+								Intent intent = new Intent(RegisterInPhone.this,RegisterActivity.class);
+								intent.putExtra("phonenumber", phoneNumber);
+								startActivity(intent);
+							}else {
+								toast(ex.toString());
+							}
 						}
-					}
-				});
+					});
+				}
 				break;
 			default:
 				break;
 		}
 	}
 
+	class MyCountTimer extends CountDownTimer {
+
+		public MyCountTimer(long millisInFuture, long countDownInterval) {
+			super(millisInFuture, countDownInterval);
+			btn_send_ver_message.setEnabled(false);
+		}
+		@Override
+		public void onTick(long millisUntilFinished) {
+			btn_send_ver_message.setText((millisUntilFinished / 1000) +"秒后重发");
+		}
+		@Override
+		public void onFinish() {
+			btn_send_ver_message.setText("发送验证码");
+			btn_send_ver_message.setEnabled(true);
+		}
+	}
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		if(timer!=null){
+			timer.cancel();
+		}
 	}
 
 	public void toast(String string){

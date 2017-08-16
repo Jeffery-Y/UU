@@ -62,11 +62,12 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 
 	TextView tv_set_name, tv_set_nick, tv_set_phone, tv_set_email, tv_set_gender;
-	ImageView iv_set_avator, iv_arrow, iv_nick_arrow, iv_email_arrow, iv_phone_arrow;
+	ImageView iv_set_avator, iv_arrow, iv_nick_arrow, iv_email_arrow, iv_phone_arrow, iv_account_arrow, iv_gender_arrow;
 	LinearLayout layout_all;
 
 	Button btn_chat, btn_back, btn_delete_friend, btn_add_friend;
-	RelativeLayout layout_head, layout_nick, layout_email, layout_phone, layout_gender, layout_black_tips, layout_two_code;
+	RelativeLayout layout_head, layout_nick, layout_email, layout_phone, layout_account
+			, layout_gender, layout_black_tips, layout_two_code;
 
 	String from = "";
 	String username = "";
