@@ -87,8 +87,7 @@
         android:layout_marginRight="@dimen/register_view_margin"
         android:background="#9fa0a0" />
 
-    <LinearLayout style="@style/Register_Input"
-        android:id="@+id/register_messge">
+    <LinearLayout style="@style/Register_Input">
 
         <TextView
             android:layout_width="90dp"

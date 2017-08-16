@@ -16,7 +16,6 @@ import android.widget.Toast;
 import cn.bmob.im.bean.BmobChatUser;
 import cn.bmob.im.util.BmobLog;
 import cn.bmob.v3.BmobInstallation;
-import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
@@ -26,7 +25,7 @@ import com.example.lenovo.uu.config.BmobConstants;
 import com.example.lenovo.uu.util.CommonUtils;
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener{
-//	private String phonenumber;
+	private String phonenumber;
 	Button btn_register;
 	EditText et_username, et_password, et_email;
 	BmobChatUser currentUser;
@@ -39,7 +38,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
 		initTopBarForLeft("注册");
 
-//		phonenumber = getIntent().getStringExtra("phonenumber");
+		phonenumber = getIntent().getStringExtra("phonenumber");
 //		phonenumber = "18640366542";
 		et_username = (EditText) findViewById(R.id.et_username);
 		et_password = (EditText) findViewById(R.id.et_password);
@@ -94,6 +93,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 		final User bu = new User();
 		bu.setUsername(name);
 		bu.setPassword(password);
+		bu.setMobilePhoneNumber(phonenumber);
+		bu.setMobilePhoneNumberVerified(true);
 		//将user和设备id进行绑定
 		bu.setDeviceType("android");
 		bu.setInstallId(BmobInstallation.getInstallationId(this));
@@ -110,13 +111,29 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 				updateUserLocation();
 				//发广播通知登陆页面退出
 				sendBroadcast(new Intent(BmobConstants.ACTION_REGISTER_SUCCESS_FINISH));
-				/*Intent intent_result = new Intent();
-				intent_result.putExtra("result", "succeed");
-				setResult(RESULT_OK, intent_result);*/
 				// 启动主页
 				Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
 				startActivity(intent);
 				finish();
+				/*BmobUser bu =new User();
+				bu.setMobilePhoneNumber(phonenumber);
+				bu.setMobilePhoneNumberVerified(true);
+				User cur = BmobUser.getCurrentUser(RegisterActivity.this,User.class);
+				bu.update(RegisterActivity.this, cur.getObjectId(),new UpdateListener() {
+
+					@Override
+					public void onSuccess() {
+						// TODO Auto-generated method stub
+						ShowToast("手机号码绑定成功");
+					}
+
+					@Override
+					public void onFailure(int arg0, String arg1) {
+						// TODO Auto-generated method stub
+						ShowToast("手机号码绑定失败："+arg0+"-"+arg1);
+					}
+				});*/
+
 				
 			}
 
@@ -130,11 +147,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 		});
 	}
 
-	/*@Override
+/*	@Override
 	public void onBackPressed(){
 		Intent intent_result = new Intent();
 		intent_result.putExtra("result", "failed");
 		setResult(RESULT_OK, intent_result);
+		super.onBackPressed();
 	}*/
 
 }

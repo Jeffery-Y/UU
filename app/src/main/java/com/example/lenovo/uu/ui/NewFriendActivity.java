@@ -35,7 +35,7 @@ public class NewFriendActivity extends ActivityBase implements OnItemLongClickLi
 		initTopBarForLeft("新朋友");
 		listview = (ListView)findViewById(R.id.list_newfriend);
 		listview.setOnItemLongClickListener(this);
-		adapter = new NewFriendAdapter(this,BmobDB.create(this).queryBmobInviteList());
+		adapter = new NewFriendAdapter(this, BmobDB.create(this).queryBmobInviteList());
 		listview.setAdapter(adapter);
 		if(from==null){//若来自通知栏的点击，则定位到最后一条
 			listview.setSelection(adapter.getCount());

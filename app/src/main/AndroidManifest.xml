@@ -130,7 +130,8 @@
         <activity android:name="com.example.lenovo.uu.ui.SetMyInfoActivity" />
 
         <activity android:name="com.example.lenovo.uu.ui.RegisterInPhone"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
         <activity
             android:name="com.example.lenovo.uu.ui.RegisterActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"

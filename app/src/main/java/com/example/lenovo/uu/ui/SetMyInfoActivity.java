@@ -32,6 +32,8 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import cn.bmob.im.BmobChatManager;
 import cn.bmob.im.config.BmobConfig;
 import cn.bmob.im.db.BmobDB;
@@ -84,6 +86,7 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 		from = getIntent().getStringExtra("from");//me add other
 		username = getIntent().getStringExtra("username");
 		initView();
+//		path = "";
 	}
 
 	private void initView() {
@@ -473,24 +476,20 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 			public void onClick(View arg0) {
 				ShowLog("点击拍照");
 				// TODO Auto-generated method stub
-				layout_choose.setBackgroundColor(getResources().getColor(
-						R.color.base_color_text_white));
-				layout_photo.setBackgroundDrawable(getResources().getDrawable(
-						R.drawable.pop_bg_press));
+				layout_choose.setBackgroundColor(getResources().getColor(R.color.base_color_text_white));
+				layout_photo.setBackground(getResources().getDrawable(R.drawable.pop_bg_press));
 				File dir = new File(BmobConstants.MyAvatarDir);
 				if (!dir.exists()) {
 					dir.mkdirs();
 				}
 				// 原图
-				File file = new File(dir, new SimpleDateFormat("yyMMddHHmmss")
-						.format(new Date()));
+				File file = new File(dir, new SimpleDateFormat("yyMMddHHmmss").format(new Date()));
 				filePath = file.getAbsolutePath();// 获取相片的保存路径
 				Uri imageUri = Uri.fromFile(file);
 
 				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 				intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-				startActivityForResult(intent,
-						BmobConstants.REQUESTCODE_UPLOADAVATAR_CAMERA);
+				startActivityForResult(intent, BmobConstants.REQUESTCODE_UPLOADAVATAR_CAMERA);
 			}
 		});
 		layout_choose.setOnClickListener(new OnClickListener() {
@@ -499,15 +498,11 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				ShowLog("点击相册");
-				layout_photo.setBackgroundColor(getResources().getColor(
-						R.color.base_color_text_white));
-				layout_choose.setBackgroundDrawable(getResources().getDrawable(
-						R.drawable.pop_bg_press));
+				layout_photo.setBackgroundColor(getResources().getColor(R.color.base_color_text_white));
+				layout_choose.setBackground(getResources().getDrawable(R.drawable.pop_bg_press));
 				Intent intent = new Intent(Intent.ACTION_PICK, null);
-				intent.setDataAndType(
-						MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-				startActivityForResult(intent,
-						BmobConstants.REQUESTCODE_UPLOADAVATAR_LOCATION);
+				intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+				startActivityForResult(intent,BmobConstants.REQUESTCODE_UPLOADAVATAR_LOCATION);
 			}
 		});
 
@@ -539,8 +534,7 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 	 * @return void
 	 * @throws
 	 */
-	private void startImageAction(Uri uri, int outputX, int outputY,
-			int requestCode, boolean isCrop) {
+	private void startImageAction(Uri uri, int outputX, int outputY, int requestCode, boolean isCrop) {
 		Intent intent = null;
 		if (isCrop) {
 			intent = new Intent("com.android.camera.action.CROP");
@@ -572,8 +566,7 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 		switch (requestCode) {
 		case BmobConstants.REQUESTCODE_UPLOADAVATAR_CAMERA:// 拍照修改头像
 			if (resultCode == RESULT_OK) {
-				if (!Environment.getExternalStorageState().equals(
-						Environment.MEDIA_MOUNTED)) {
+				if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 					ShowToast("SD不可用");
 					return;
 				}
@@ -581,8 +574,7 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 				File file = new File(filePath);
 				degree = PhotoUtil.readPictureDegree(file.getAbsolutePath());
 				Log.i("life", "拍照后的角度：" + degree);
-				startImageAction(Uri.fromFile(file), 200, 200,
-						BmobConstants.REQUESTCODE_UPLOADAVATAR_CROP, true);
+				startImageAction(Uri.fromFile(file), 200, 200, BmobConstants.REQUESTCODE_UPLOADAVATAR_CROP, true);
 			}
 			break;
 		case BmobConstants.REQUESTCODE_UPLOADAVATAR_LOCATION:// 本地修改头像
@@ -601,8 +593,7 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 				}
 				isFromCamera = false;
 				uri = data.getData();
-				startImageAction(uri, 200, 200,
-						BmobConstants.REQUESTCODE_UPLOADAVATAR_CROP, true);
+				startImageAction(uri, 200, 200, BmobConstants.REQUESTCODE_UPLOADAVATAR_CROP, true);
 			} else {
 				ShowToast("照片获取失败");
 			}
@@ -614,13 +605,13 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 				avatorPop.dismiss();
 			}
 			if (data == null) {
-				// Toast.makeText(this, "取消选择", Toast.LENGTH_SHORT).show();
+				 Toast.makeText(this, "取消选择", Toast.LENGTH_SHORT).show();
 				return;
 			} else {
 				saveCropAvator(data);
 			}
 			// 初始化文件路径
-			filePath = "";
+//			filePath = "";
 			// 上传头像
 			uploadAvatar();
 			break;
@@ -631,8 +622,8 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 	}
 
 	private void uploadAvatar() {
-		BmobLog.i("头像地址：" + path);
-		final BmobFile bmobFile = new BmobFile(new File(path));
+		BmobLog.i("头像地址：" + filePath);//////////////
+		final BmobFile bmobFile = new BmobFile(new File(filePath));/////////////////
 		bmobFile.upload(this, new UploadFileListener() {
 
 			@Override
@@ -677,7 +668,7 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 		});
 	}
 
-	String path;
+//	String path = "";
 
 	/**
 	 * 保存裁剪的头像
@@ -698,7 +689,8 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 				// 保存图片
 				String filename = new SimpleDateFormat("yyMMddHHmmss")
 						.format(new Date());
-				path = BmobConstants.MyAvatarDir + filename;
+				filePath = BmobConstants.MyAvatarDir + filename;
+				BmobLog.i("裁剪图片的路径：" + filePath);////////////
 				PhotoUtil.saveBitmap(BmobConstants.MyAvatarDir, filename,
 						bitmap, true);
 				// 上传头像

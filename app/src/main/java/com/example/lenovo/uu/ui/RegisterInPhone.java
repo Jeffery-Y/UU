@@ -1,8 +1,10 @@
 package com.example.lenovo.uu.ui;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lenovo.uu.R;
+import com.example.lenovo.uu.config.BmobConstants;
 import com.example.lenovo.uu.config.Config;
 
 import cn.bmob.newsmssdk.BmobSMS;
@@ -29,6 +32,9 @@ import cn.bmob.newsmssdk.listener.VerifySMSCodeListener;
 import cn.bmob.v3.Bmob;
 
 public class RegisterInPhone extends BaseActivity implements OnClickListener{
+
+	private RegisterInPhone.MyBroadcastReceiver receiver = new RegisterInPhone.MyBroadcastReceiver();
+
 	LinearLayout register_messge, register_message_hint;
 	TextView input_phone;
 	EditText et_country, et_phone, et_ver_code;
@@ -47,13 +53,19 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 		BmobSMS.initialize(RegisterInPhone.this, Config.applicationId, new MySMSCodeListener());
 		initTopBarForLeft("注册");
 		initViews();
+		//注册退出广播
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(BmobConstants.ACTION_REGISTER_SUCCESS_FINISH);
+		registerReceiver(receiver, filter);
 	}
+
 	private void initViews() {
 		register_messge = (LinearLayout)findViewById(R.id.register_messge);
 		register_message_hint = (LinearLayout)findViewById(R.id.register_message_hint);
 		input_phone = (TextView)findViewById(R.id.input_phone);
 		et_country = (EditText) findViewById(R.id.et_country);
 		et_phone = (EditText) findViewById(R.id.et_phone);
+		et_phone.requestFocus();
 		et_ver_code = (EditText) findViewById(R.id.et_ver_code);
 		btn_register_next = (Button) findViewById(R.id.btn_register_next);
 		btn_send_ver_message = (Button) findViewById(R.id.btn_send_ver_message);
@@ -87,37 +99,14 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 			}
 		});
 
-		et_ver_code.addTextChangedListener(new TextWatcher() {
 
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				// TODO Auto-generated method stub
-				if (et_phone.getText().toString().length() == 6) {
-					btn_register_next.setEnabled(true);
-					btn_register_next.setBackground(RegisterInPhone.this.getResources().getDrawable(R.drawable.btn_login_selector));
-				} else {
-					btn_register_next.setEnabled(false);
-					btn_register_next.setBackground(RegisterInPhone.this.getResources().getDrawable(R.drawable.register_btn_shape));
-				}
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
-			}
-		});
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.btn_send_ver_message:
+				et_ver_code.requestFocus();
 				btn_send_ver_message.setEnabled(false);
 				phoneNumber = et_phone.getText().toString();
 				if(phoneNumber.length() == 11){
@@ -130,6 +119,35 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 								RegisterInPhone.this.smsId = smsId;
 //								et_smsid.setText(smsId+"");
 								Log.e("demo", ""+smsId);
+								register_messge.setVisibility(View.VISIBLE);
+								register_message_hint.setVisibility(View.VISIBLE);
+								input_phone.setText(phoneNumber);
+
+								et_ver_code.addTextChangedListener(new TextWatcher() {
+
+									@Override
+									public void onTextChanged(CharSequence s, int start, int before, int count) {
+										// TODO Auto-generated method stub
+										if (!et_phone.getText().toString().isEmpty()) {
+											btn_register_next.setEnabled(true);
+											btn_register_next.setBackground(RegisterInPhone.this.getResources().getDrawable(R.drawable.btn_login_selector));
+										} else {
+											btn_register_next.setEnabled(false);
+											btn_register_next.setBackground(RegisterInPhone.this.getResources().getDrawable(R.drawable.register_btn_shape));
+										}
+									}
+
+									@Override
+									public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+										// TODO Auto-generated method stub
+
+									}
+
+									@Override
+									public void afterTextChanged(Editable s) {
+										// TODO Auto-generated method stub
+									}
+								});
 							}else {
 								toast(ex.toString());
 								btn_send_ver_message.setEnabled(true);
@@ -165,7 +183,7 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 							toast("verify ok ");
 							Intent intent = new Intent(RegisterInPhone.this,RegisterActivity.class);
 							intent.putExtra("phonenumber", phoneNumber);
-							startActivityForResult(intent, 1);
+							startActivity(intent);
 						}else {
 							toast(ex.toString());
 						}
@@ -177,23 +195,6 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 		}
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data){
-		switch (requestCode){
-			case 1:
-				if(resultCode == RESULT_OK){
-					String result = data.getStringExtra("result");
-					if(result.equals("succeed")){
-						finish();
-					} else if(result.equals("failed")){
-
-					}
-				}
-				break;
-			default:
-				break;
-		}
-	}
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -207,8 +208,18 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 
 		@Override
 		public void onReceive(String content) {
-			if(et_ver_code != null){
-				et_ver_code.setText(content);
+				if(et_ver_code != null)et_ver_code.setText(content);
+		}
+
+	}
+
+
+	public class MyBroadcastReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (intent != null && BmobConstants.ACTION_REGISTER_SUCCESS_FINISH.equals(intent.getAction())) {
+				finish();
 			}
 		}
 

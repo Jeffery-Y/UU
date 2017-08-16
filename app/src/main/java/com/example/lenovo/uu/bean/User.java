@@ -12,7 +12,7 @@ public class User extends BmobChatUser {
 	 * 显示数据拼音的首字母
 	 */
 	private String sortLetters;
-	
+
 	/**
 	 * 性别-true-男
 	 */

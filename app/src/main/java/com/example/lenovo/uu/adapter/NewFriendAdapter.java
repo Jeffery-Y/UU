@@ -88,7 +88,7 @@ public class NewFriendAdapter extends BaseListAdapter<BmobInvitation> {
 		try {
 			//同意添加好友
 			BmobUserManager.getInstance(mContext).agreeAddContact(msg, new UpdateListener() {
-				
+
 				@Override
 				public void onSuccess() {
 					// TODO Auto-generated method stub
@@ -98,7 +98,7 @@ public class NewFriendAdapter extends BaseListAdapter<BmobInvitation> {
 					btn_add.setTextColor(mContext.getResources().getColor(R.color.base_color_text_black));
 					btn_add.setEnabled(false);
 					//保存到application中方便比较
-					CustomApplcation.getInstance().setContactList(CollectionUtils.list2map(BmobDB.create(mContext).getContactList()));	
+					CustomApplcation.getInstance().setContactList(CollectionUtils.list2map(BmobDB.create(mContext).getContactList()));
 				}
 				
 				@Override
