@@ -15,18 +15,18 @@
     <string name="login_pwd">密码 </string>
     <string name="login_email">确认密码 </string>
     <string name="message_search_hint">搜索&#8230;</string>
-    
+
     <string name="main_tab_recent">消息</string>
     <string name="main_tab_contact">联系人</string>
     <string name="mian_tab_set">设置</string>
-    
+
     <string name="xlistview_header_hint_normal">下拉刷新</string>
     <string name="xlistview_header_hint_ready">松开刷新数据</string>
     <string name="xlistview_header_hint_loading">正在加载&#8230;</string>
     <string name="xlistview_header_last_time">上次更新时间：</string>
     <string name="xlistview_footer_hint_normal">查看更多</string>
     <string name="xlistview_footer_hint_ready">松开载入更多</string>
-    
+
     <string name="add_avator">头像</string>
     <string name="add_nick">昵称</string>
     <string name="add_name">账号</string>
@@ -41,14 +41,13 @@
     <string name="add_me_two">扫一扫二维码，加我UU</string>
 
 
-
     <string name="set_notify">接收新消息通知</string>
     <string name="set_myinfo">个人资料</string>
     <string name="set_blacklist">黑名单</string>
     <string name="set_voice">声音</string>
     <string name="set_vibrate">震动</string>
     <string name="tips">提示</string>
-    
+
     <string name="logout">退出登录</string>
     <string name="pop_photo">拍照</string>
     <string name="pop_choose">从手机相册选中</string>
@@ -61,28 +60,28 @@
     <string name="delete_friend">删除好友</string>
     <string name="chat">发起会话</string>
     <string name="add_friend">添加好友</string>
-    
+
     <string name="send_state">已读</string>
-    
+
     <string name="longclick_speak">长按说话</string>
     <string name="picture">照片</string>
     <string name="send">发送</string>
     <string name="camera">拍摄</string>
     <string name="location">位置</string>
-    
+
     <string name="black_tips">已添加至黑名单，你将不再收到对方的消息!</string>
-    
+
     <string name="username">用户名</string>
     <string name="search">搜索</string>
-    
+
     <string name="new_friends">新朋友</string>
-    
+
     <string name="near_people">附近的人</string>
-    
+
     <string name="voice_up_tips">手指上滑,取消发送</string>
     <string name="voice_cancel_tips">松开手指，取消发送</string>
-    
+
     <string name="voice_seconds_tips">还可以说%1$s秒</string>
-    
+
     <string name="voice_short_tips">录音时间太短</string>
- </resources>
+</resources>

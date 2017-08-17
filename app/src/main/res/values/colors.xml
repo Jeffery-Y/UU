@@ -3,6 +3,7 @@
 
     <color name="black">#000000</color>
     <color name="wight">#ffffff</color>
+    <color name="gray_background">#E5E3E4</color>
 
     <color name="splash_bg">#D3B548</color>
     <color name="splash_bg2">#B6DA53</color>

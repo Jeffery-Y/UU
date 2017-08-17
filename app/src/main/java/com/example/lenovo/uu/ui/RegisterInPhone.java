@@ -64,6 +64,10 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 		from = getIntent().getStringExtra("from");//login and register
 		if(from.equals("login")){
 			btn_register_next.setText("验证登录");
+		} else if(from.equals("register")){
+			btn_register_next.setText("注册账号");
+		} else if(from.equals("reset_password")){
+			btn_register_next.setText("修改密码");
 		}
 		//注册退出广播
 		IntentFilter filter = new IntentFilter();
@@ -213,6 +217,21 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 								toast("手机验证通过");
 								Intent intent = new Intent(RegisterInPhone.this,RegisterActivity.class);
 								intent.putExtra("phonenumber", phoneNumber);
+								startActivity(intent);
+							}else {
+								toast(ex.toString());
+							}
+						}
+					});
+				} else if(from.equals("reset_password")){
+					BmobSMS.verifySmsCode(this, phoneNumber, et_ver_code.getText().toString().trim(), new VerifySMSCodeListener() {
+
+						@Override
+						public void done(BmobException ex) {
+							if(ex == null){
+								toast("手机验证通过");
+								Intent intent = new Intent(RegisterInPhone.this,ResetPassword.class);
+								intent.putExtra("from", "verified_phone");
 								startActivity(intent);
 							}else {
 								toast(ex.toString());

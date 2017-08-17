@@ -1,22 +1,5 @@
-1.注册页面标题栏颜色
-2.邮箱登录
-3.手机号登录
-4.保存密码
-5.chat低栏高一点
+4.修改密码
 5.最近消息页面加搜索
 
-08-15 23:23:04.057 13733-13733/com.example.lenovo.uu E/AndroidRuntime: FATAL EXCEPTION: main
-                                                                       Process: com.example.lenovo.uu, PID: 13733
-                                                                       java.lang.NoSuchMethodError: No virtual method setMobilePhoneNumber(Ljava/lang/String;)V in class Lcom/example/lenovo/uu/bean/User; or its super classes (declaration of 'com.example.lenovo.uu.bean.User' appears in /data/app/com.example.lenovo.uu-2/split_lib_slice_6_apk.apk)
-                                                                           at com.example.lenovo.uu.ui.RegisterActivity$1.onSuccess(RegisterActivity.java:107)
-                                                                           at cn.bmob.v3.BmobUser$1.onSuccess(SourceFile:153)
-                                                                           at cn.bmob.v3.requestmanager.thing$1.V(SourceFile:1)
-                                                                           at cn.bmob.v3.requestmanager.This.Code(SourceFile:1)
-                                                                           at h.acknowledge.run(SourceFile:98)
-                                                                           at android.os.Handler.handleCallback(Handler.java:751)
-                                                                           at android.os.Handler.dispatchMessage(Handler.java:95)
-                                                                           at android.os.Looper.loop(Looper.java:154)
-                                                                           at android.app.ActivityThread.main(ActivityThread.java:6369)
-                                                                           at java.lang.reflect.Method.invoke(Native Method)
-                                                                           at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:886)
-                                                                           at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:776)
+个人资料页面左边对齐
+旧密码改密码

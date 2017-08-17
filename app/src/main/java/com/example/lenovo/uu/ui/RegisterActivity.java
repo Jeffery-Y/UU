@@ -25,9 +25,9 @@ import com.example.lenovo.uu.config.BmobConstants;
 import com.example.lenovo.uu.util.CommonUtils;
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener{
-	private String phonenumber = "";
+	private String phonenumber;
 	Button btn_register, registr_in_back;
-	EditText et_username, et_password, et_email;
+	EditText et_username, et_password, re_et_password;
 	BmobChatUser currentUser;
 
 	@Override
@@ -42,7 +42,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 //		phonenumber = "18640366542";
 		et_username = (EditText) findViewById(R.id.et_username);
 		et_password = (EditText) findViewById(R.id.et_password);
-		et_email = (EditText) findViewById(R.id.et_email);
+		re_et_password = (EditText) findViewById(R.id.re_et_password);
 
 		btn_register = (Button) findViewById(R.id.btn_register);
 		btn_register.setOnClickListener(this);
@@ -67,7 +67,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 	private void register(){
 		String name = et_username.getText().toString();
 		String password = et_password.getText().toString();
-		String pwd_again = et_email.getText().toString();
+		String pwd_again = re_et_password.getText().toString();
 		
 		if (TextUtils.isEmpty(name)) {
 			ShowToast(R.string.toast_error_username_null);
@@ -120,26 +120,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 				Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
 				startActivity(intent);
 				finish();
-				/*BmobUser bu =new User();
-				bu.setMobilePhoneNumber(phonenumber);
-				bu.setMobilePhoneNumberVerified(true);
-				User cur = BmobUser.getCurrentUser(RegisterActivity.this,User.class);
-				bu.update(RegisterActivity.this, cur.getObjectId(),new UpdateListener() {
-
-					@Override
-					public void onSuccess() {
-						// TODO Auto-generated method stub
-						ShowToast("手机号码绑定成功");
-					}
-
-					@Override
-					public void onFailure(int arg0, String arg1) {
-						// TODO Auto-generated method stub
-						ShowToast("手机号码绑定失败："+arg0+"-"+arg1);
-					}
-				});*/
-
-				
 			}
 
 			@Override
@@ -151,14 +131,5 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 			}
 		});
 	}
-
-
-/*	@Override
-	public void onBackPressed(){
-		Intent intent_result = new Intent();
-		intent_result.putExtra("result", "failed");
-		setResult(RESULT_OK, intent_result);
-		super.onBackPressed();
-	}*/
 
 }

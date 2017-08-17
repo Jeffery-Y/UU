@@ -585,14 +585,10 @@ public class ChatActivity extends ActivityBase implements OnClickListener,
 					public void onFailure(int arg0, String arg1) {
 						// TODO Auto-generated method stub
 						ShowLog("发送失败:" + arg1);
-						((BmobMsg) values)
-								.setStatus(BmobConfig.STATUS_SEND_FAIL);
-						parentV.findViewById(R.id.progress_load).setVisibility(
-								View.INVISIBLE);
-						parentV.findViewById(R.id.iv_fail_resend)
-								.setVisibility(View.VISIBLE);
-						parentV.findViewById(R.id.tv_send_status)
-								.setVisibility(View.INVISIBLE);
+						((BmobMsg) values).setStatus(BmobConfig.STATUS_SEND_FAIL);
+						parentV.findViewById(R.id.progress_load).setVisibility(View.INVISIBLE);
+						parentV.findViewById(R.id.iv_fail_resend).setVisibility(View.VISIBLE);
+						parentV.findViewById(R.id.tv_send_status).setVisibility(View.INVISIBLE);
 					}
 				});
 		mAdapter.notifyDataSetChanged();

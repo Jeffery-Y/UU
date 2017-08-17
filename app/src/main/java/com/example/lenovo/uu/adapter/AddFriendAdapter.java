@@ -61,7 +61,8 @@ public class AddFriendAdapter extends BaseListAdapter<BmobChatUser> {
 				progress.setCanceledOnTouchOutside(false);
 				progress.show();
 				//发送tag请求
-				BmobChatManager.getInstance(mContext).sendTagMessage(BmobConfig.TAG_ADD_CONTACT, contract.getObjectId(),new PushListener() {
+				BmobChatManager.getInstance(mContext).sendTagMessage(BmobConfig.TAG_ADD_CONTACT,
+						contract.getObjectId(),new PushListener() {
 					
 					@Override
 					public void onSuccess() {
