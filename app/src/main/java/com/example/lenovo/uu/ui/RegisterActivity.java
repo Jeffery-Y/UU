@@ -25,7 +25,7 @@ import com.example.lenovo.uu.config.BmobConstants;
 import com.example.lenovo.uu.util.CommonUtils;
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener{
-	private String phonenumber;
+	private String phonenumber = "", from = "";
 	Button btn_register, registr_in_back;
 	EditText et_username, et_password, re_et_password;
 	BmobChatUser currentUser;
@@ -38,7 +38,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
 //		initTopBarForLeft("注册");
 
-		phonenumber = getIntent().getStringExtra("phonenumber");
+		from = getIntent().getStringExtra("from");
+		if(!(TextUtils.isEmpty(from)) && from.equals("phone"))phonenumber = getIntent().getStringExtra("phonenumber");
 //		phonenumber = "18640366542";
 		et_username = (EditText) findViewById(R.id.et_username);
 		et_password = (EditText) findViewById(R.id.et_password);
@@ -97,14 +98,16 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 		//注册的时候需要注意两点：1、User表中绑定设备id和type，2、设备表中绑定username字段
 		final User bu = new User();
 		bu.setUsername(name);
+		bu.setNick(name);
 		bu.setPassword(password);
-		bu.setMobilePhoneNumber(phonenumber);
-		bu.setMobilePhoneNumberVerified(true);
+		if(!(TextUtils.isEmpty(from)) && from.equals("phone")){
+			bu.setMobilePhoneNumber(phonenumber);
+			bu.setMobilePhoneNumberVerified(true);
+		}
 		//将user和设备id进行绑定
 		bu.setDeviceType("android");
 		bu.setInstallId(BmobInstallation.getInstallationId(this));
 		bu.signUp(RegisterActivity.this, new SaveListener() {
-
 			@Override
 			public void onSuccess() {
 				// TODO Auto-generated method stub

@@ -195,11 +195,21 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 								@Override
 								public void done(User user, cn.bmob.v3.exception.BmobException ex) {
 									// TODO Auto-generated method stub
-									progress.dismiss();
 									if(ex==null){
 										toast("登录成功");
 										//发广播通知登陆页面退出
 										sendBroadcast(new Intent(BmobConstants.ACTION_REGISTER_SUCCESS_FINISH));
+										runOnUiThread(new Runnable() {
+
+											@Override
+											public void run() {
+												// TODO Auto-generated method stub
+												progress.setMessage("正在获取好友列表...");
+											}
+										});
+										//更新用户的地理位置以及好友的资料
+										updateUserInfos();
+										progress.dismiss();
 										Intent intent = new Intent(RegisterInPhone.this,MainActivity.class);
 										startActivity(intent);
 										finish();
@@ -208,14 +218,16 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 									}
 								}
 							});
-				} else if(from.equals("registr")){
+				} else if(from.equals("register")){
 					BmobSMS.verifySmsCode(this, phoneNumber, et_ver_code.getText().toString().trim(), new VerifySMSCodeListener() {
 
 						@Override
 						public void done(BmobException ex) {
+							progress.dismiss();
 							if(ex == null){
 								toast("手机验证通过");
 								Intent intent = new Intent(RegisterInPhone.this,RegisterActivity.class);
+								intent.putExtra("from", "phone");
 								intent.putExtra("phonenumber", phoneNumber);
 								startActivity(intent);
 							}else {
@@ -228,6 +240,7 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 
 						@Override
 						public void done(BmobException ex) {
+							progress.dismiss();
 							if(ex == null){
 								toast("手机验证通过");
 								Intent intent = new Intent(RegisterInPhone.this,ResetPassword.class);

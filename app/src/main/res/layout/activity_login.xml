@@ -115,6 +115,7 @@
             android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/btn_register_no_phone"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_marginLeft="5dp"

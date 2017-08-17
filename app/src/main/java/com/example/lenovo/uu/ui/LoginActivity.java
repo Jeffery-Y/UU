@@ -29,7 +29,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
 	EditText et_username, et_password;
 	Button btn_login;
-	TextView btn_register, btn_login_by_phone;
+	TextView btn_register, btn_login_by_phone, btn_register_no_phone;
 	BmobChatUser currentUser;
 
 	private MyBroadcastReceiver receiver = new MyBroadcastReceiver();
@@ -52,6 +52,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		btn_login = (Button) findViewById(R.id.btn_login);
 		btn_login_by_phone = (TextView) findViewById(R.id.btn_login_by_phone);
 		btn_register = (TextView) findViewById(R.id.btn_register);
+		btn_register_no_phone = (TextView)findViewById(R.id.btn_register_no_phone);
+		btn_register_no_phone.setOnClickListener(this);
 		btn_login.setOnClickListener(this);
 		btn_login_by_phone.setOnClickListener(this);
 		btn_register.setOnClickListener(this);
@@ -88,6 +90,11 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				Intent intent2 = new Intent(LoginActivity.this, RegisterInPhone.class);
 				intent2.putExtra("from", "login");
 				startActivity(intent2);
+				break;
+			case R.id.btn_register_no_phone:
+				Intent intent3 = new Intent(LoginActivity.this, RegisterActivity.class);
+				intent3.putExtra("from", "no_phone");
+				startActivity(intent3);
 				break;
 			default:
 				break;

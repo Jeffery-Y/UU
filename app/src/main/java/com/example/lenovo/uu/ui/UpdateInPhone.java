@@ -212,6 +212,7 @@ public class UpdateInPhone extends ActivityBase implements OnClickListener{
 									initTopBarForLeft("绑定新手机");
 									register_hint_text.setText("绑定手机号码验证");
 									et_phone.setHint("请输入要绑定的手机号码");
+									timer.onFinish();
 									btn_register_next.setText("绑定");
 								}else {
 									ShowToast("当前验证的手机与已绑定手机不一致！");
