@@ -36,14 +36,25 @@
             android:textSize="18sp" />
 
         <Button
-            android:id="@+id/btn_search"
+            android:id="@+id/btn_exact_search"
             style="@style/Smile.TextView._White"
-            android:layout_width="60dp"
+            android:layout_width="39dp"
             android:layout_height="39dp"
             android:layout_margin="8dp"
             android:layout_marginRight="11dp"
             android:background="@drawable/btn_login_selector"
-            android:text="@string/search"
+            android:text="精确"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btn_vague_search"
+            style="@style/Smile.TextView._White"
+            android:layout_width="39dp"
+            android:layout_height="39dp"
+            android:layout_margin="8dp"
+            android:layout_marginRight="11dp"
+            android:background="@drawable/btn_login_selector"
+            android:text="模糊"
             android:textSize="14sp" />
     </LinearLayout>
 

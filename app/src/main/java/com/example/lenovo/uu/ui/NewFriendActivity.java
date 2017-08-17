@@ -1,16 +1,19 @@
 package com.example.lenovo.uu.ui;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import cn.bmob.im.bean.BmobInvitation;
 import cn.bmob.im.db.BmobDB;
 
 import com.example.lenovo.uu.R;
 import com.example.lenovo.uu.adapter.NewFriendAdapter;
+import com.example.lenovo.uu.bean.User;
 import com.example.lenovo.uu.view.dialog.DialogTips;
 
 /** 新朋友 */
@@ -41,6 +44,7 @@ public class NewFriendActivity extends ActivityBase implements OnItemLongClickLi
 			listview.setSelection(adapter.getCount());
 		}
 	}
+
 
 	@Override
 	public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long arg3) {

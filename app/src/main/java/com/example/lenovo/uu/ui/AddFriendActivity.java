@@ -31,13 +31,21 @@ import com.example.lenovo.uu.view.xlist.XListView.IXListViewListener;
 /** 添加好友 */
 public class AddFriendActivity extends ActivityBase implements OnClickListener,IXListViewListener,OnItemClickListener{
 	private CharacterParser characterParser;
-
-	EditText et_find_name;
-	Button btn_search, scan_twocode;
-	
+	ProgressDialog progress ;
 	List<BmobChatUser> users = new ArrayList<BmobChatUser>();
 	XListView mListView;
 	AddFriendAdapter adapter;
+
+	EditText et_find_name;
+	Button btn_exact_search, btn_vague_search, scan_twocode;
+	/*if(arg0.size()<BRequest.QUERY_LIMIT_COUNT){
+                            mListView.setPullLoadEnable(false);
+                            ShowToast("用户搜索完成!");
+                        }else{
+                            ShowLog("setPullLoadEnable true");
+                            mListView.setPullLoadEnable(true);
+                        }*/
+//	int curPage = 0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -49,8 +57,10 @@ public class AddFriendActivity extends ActivityBase implements OnClickListener,I
 	private void initView(){
 		initTopBarForLeft("查找好友");
 		et_find_name = (EditText)findViewById(R.id.et_find_name);
-		btn_search = (Button)findViewById(R.id.btn_search);
-		btn_search.setOnClickListener(this);
+		btn_exact_search = (Button)findViewById(R.id.btn_exact_search);
+		btn_exact_search.setOnClickListener(this);
+		btn_vague_search = (Button)findViewById(R.id.btn_vague_search);
+		btn_vague_search.setOnClickListener(this);
         scan_twocode = (Button)findViewById(R.id.scan_twocode);
         scan_twocode.setOnClickListener(this);
 		initXListView();
@@ -72,134 +82,33 @@ public class AddFriendActivity extends ActivityBase implements OnClickListener,I
 		
 		mListView.setOnItemClickListener(this);
 	}
-	
-	int curPage = 0;
-	ProgressDialog progress ;
-	private void initSearchList(final boolean isUpdate){
-		if(!isUpdate){
-			progress = new ProgressDialog(AddFriendActivity.this);
-			progress.setMessage("正在搜索...");
-			progress.setCanceledOnTouchOutside(true);
-			progress.show();
-		}
-		userManager.queryUserByPage(isUpdate, 0, searchName, new FindListener<BmobChatUser>() {
 
-			@Override
-			public void onError(int arg0, String arg1) {
-				// TODO Auto-generated method stub
-				BmobLog.i("查询错误:"+arg1);
-				if(users!=null){
-					users.clear();
-				}
-				ShowToast("用户不存在");
-				mListView.setPullLoadEnable(false);
-				refreshPull();
-				//这样能保证每次查询都是从头开始
-				curPage = 0;
-			}
-
-			@Override
-			public void onSuccess(List<BmobChatUser> arg0) {
-				// TODO Auto-generated method stub
-				if (CollectionUtils.isNotNull(arg0)) {
-					if(isUpdate){
-						users.clear();
-					}
-
-					//根据用户输入的用户名筛选
-					characterParser = CharacterParser.getInstance();
-					List<BmobChatUser> filterDateList = new ArrayList<BmobChatUser>();
-					filterDateList.clear();
-					for (BmobChatUser sortModel : arg0) {
-						String name = sortModel.getUsername();
-						if (name != null) {
-							if (name.indexOf(searchName) != -1 ||
-									characterParser.getSelling(name).contains(searchName)) {
-								filterDateList.add(sortModel);
-							}
-						}
-					}
-					arg0 = filterDateList;
-
-					adapter.addAll(arg0);
-					if(arg0.size()<BRequest.QUERY_LIMIT_COUNT){
-						mListView.setPullLoadEnable(false);
-						ShowToast("用户搜索完成!");
-					}else{
-						mListView.setPullLoadEnable(true);
-					}
-				}else{
-					BmobLog.i("查询成功:无返回值");
-					if(users!=null){
-						users.clear();
-					}
-					ShowToast("用户不存在");
-				}
-				if(!isUpdate){
-					progress.dismiss();
-				}else{
-					refreshPull();
-				}
-				//这样能保证每次查询都是从头开始
-				curPage = 0;
-			}
-		});
-		
-	}
-	
-	/** 查询更多
-	  * @Title: queryMoreNearList
-	  * @Description: TODO
-	  * @param @param page 
-	  * @return void
-	  * @throws
-	  */
-	private void queryMoreSearchList(int page){
-		userManager.queryUserByPage(true, page, searchName, new FindListener<BmobChatUser>() {
-
-			@Override
-			public void onSuccess(List<BmobChatUser> arg0) {
-				// TODO Auto-generated method stub
-				if (CollectionUtils.isNotNull(arg0)) {
-					adapter.addAll(arg0);
-				}
-				refreshLoad();
-			}
-			
-			@Override
-			public void onError(int arg0, String arg1) {
-				// TODO Auto-generated method stub
-				ShowLog("搜索更多用户出错:"+arg1);
-				mListView.setPullLoadEnable(false);
-				refreshLoad();
-			}
-
-		});
-	}
-	
-	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-		// TODO Auto-generated method stub
-		BmobChatUser user = (BmobChatUser) adapter.getItem(position-1);
-		Intent intent =new Intent(this,SetMyInfoActivity.class);
-		intent.putExtra("from", "add");
-		intent.putExtra("username", user.getUsername());
-		startAnimActivity(intent);		
-	}
-	
-	String searchName ="";
 	@Override
 	public void onClick(View arg0) {
 		// TODO Auto-generated method stub
 		switch (arg0.getId()) {
-			case R.id.btn_search://搜索
+			case R.id.btn_exact_search:
+				btn_vague_search.setEnabled(false);
+//				adapter
 				users.clear();
-				searchName = et_find_name.getText().toString();
-				if(searchName!=null && !searchName.equals("")){
-					initSearchList(false);
+				String exact_search_name = et_find_name.getText().toString();
+				if(exact_search_name!=null && !exact_search_name.equals("")){
+					initExactSearchList(exact_search_name);
 				}else{
 					ShowToast("请输入用户名");
 				}
+				btn_vague_search.setEnabled(true);
+				break;
+			case R.id.btn_vague_search://模糊搜索
+				btn_exact_search.setEnabled(false);
+				users.clear();
+				String vague_search_name = et_find_name.getText().toString();
+				if(vague_search_name!=null && !vague_search_name.equals("")){
+					initVagueSearchList(vague_search_name);
+				}else{
+					ShowToast("请输入用户名");
+				}
+				btn_exact_search.setEnabled(true);
 				break;
 			case R.id.scan_twocode:
 				Intent intent =new Intent(this,CommonScanActivity.class);
@@ -210,6 +119,97 @@ public class AddFriendActivity extends ActivityBase implements OnClickListener,I
 		}
 	}
 
+	private void initExactSearchList(String exact_search_name){
+		userManager.queryUser(exact_search_name, new FindListener<User>() {
+
+			@Override
+			public void onError(int arg0, String arg1) {
+				ShowLog("onError onError:" + arg1);
+			}
+
+			@Override
+			public void onSuccess(List<User> arg0) {
+				if (arg0 != null && arg0.size() > 0) {
+					adapter.add(arg0.get(0));
+				} else {
+					users.clear();
+					adapter = new AddFriendAdapter(AddFriendActivity.this, users);
+					mListView.setAdapter(adapter);
+
+					mListView.setOnItemClickListener(AddFriendActivity.this);
+//					mListView.removeAllViews();
+					ShowToast("此账号不存在！");
+					ShowLog("Add ExactSearch:查无此人");
+				}
+			}
+		});
+	}
+
+	private void initVagueSearchList(String vague_search_name){
+		progress = new ProgressDialog(AddFriendActivity.this);
+		progress.setMessage("正在搜索...");
+		progress.setCanceledOnTouchOutside(true);
+		progress.show();
+		queryAllRelateUser(vague_search_name, 0);
+	}
+
+	private void queryAllRelateUser(final String vague_search_name, final int cur_page){//?????????????????????????isupdate
+
+		userManager.queryUserByPage(false, cur_page, vague_search_name, new FindListener<BmobChatUser>() {
+			@Override
+			public void onSuccess(List<BmobChatUser> arg0) {
+				// TODO Auto-generated method stub
+				if (CollectionUtils.isNotNull(arg0)) {
+					//根据用户输入的用户名筛选
+					characterParser = CharacterParser.getInstance();
+					List<BmobChatUser> filterDateList = new ArrayList<BmobChatUser>();
+					filterDateList.clear();
+					for (BmobChatUser sortModel : arg0) {
+						String name = sortModel.getUsername();
+						ShowLog("Add querry by page0:" + name + "Sell:" + characterParser.getSelling(name));
+						if (name != null) {
+							if (name.indexOf(vague_search_name) != -1 ||
+									characterParser.getSelling(name).contains(vague_search_name)) {
+								ShowLog("Add in adapter:" + name);
+								filterDateList.add(sortModel);
+							}
+						}
+					}
+//					arg0 = filterDateList;//??????????????脱裤子放屁
+					adapter.addAll(filterDateList);
+
+					queryAllRelateUser(vague_search_name, cur_page + 1);
+				}else{
+					BmobLog.i("查询成功:无返回值");
+					ShowToast("查询结束");
+					ShowLog("查询结束");
+					progress.dismiss();
+				}
+			}
+
+			@Override
+			public void onError(int arg0, String arg1) {
+				// TODO Auto-generated method stub
+				BmobLog.i("查询错误:"+arg1);
+				ShowToast("查询出现错误");
+//				mListView.setPullLoadEnable(false);
+//				refreshPull();
+			}
+		});
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+		// TODO Auto-generated method stub
+		BmobChatUser user = (BmobChatUser) adapter.getItem(position-1);
+		Intent intent =new Intent(this,SetMyInfoActivity.class);
+		intent.putExtra("from", "add");
+		intent.putExtra("username", user.getUsername());
+		startAnimActivity(intent);		
+	}
+
+
+
 	@Override
 	public void onRefresh() {
 		// TODO Auto-generated method stub
@@ -217,43 +217,7 @@ public class AddFriendActivity extends ActivityBase implements OnClickListener,I
 	}
 
 	@Override
-	public void onLoadMore() {
+	public void onLoadMore(){
 		// TODO Auto-generated method stub
-		userManager.querySearchTotalCount(searchName, new CountListener() {
-			
-			@Override
-			public void onSuccess(int arg0) {
-				// TODO Auto-generated method stub
-				if(arg0 >users.size()){
-					curPage++;
-					queryMoreSearchList(curPage);
-				}else{
-					ShowToast("数据加载完成");
-					mListView.setPullLoadEnable(false);
-					refreshLoad();
-				}
-			}
-			
-			@Override
-			public void onFailure(int arg0, String arg1) {
-				// TODO Auto-generated method stub
-				ShowLog("查询附近的人总数失败"+arg1);
-				refreshLoad();
-			}
-		});
 	}
-	
-	private void refreshLoad(){
-		if (mListView.getPullLoading()) {
-			mListView.stopLoadMore();
-		}
-	}
-	
-	private void refreshPull(){
-		if (mListView.getPullRefreshing()) {
-			mListView.stopRefresh();
-		}
-	}
-	
-
 }

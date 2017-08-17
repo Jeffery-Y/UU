@@ -37,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import cn.bmob.im.BmobChatManager;
+import cn.bmob.im.bean.BmobChatUser;
 import cn.bmob.im.config.BmobConfig;
 import cn.bmob.im.db.BmobDB;
 import cn.bmob.im.util.BmobLog;
@@ -50,6 +51,7 @@ import com.example.lenovo.uu.CustomApplcation;
 import com.example.lenovo.uu.R;
 import com.example.lenovo.uu.bean.User;
 import com.example.lenovo.uu.config.BmobConstants;
+import com.example.lenovo.uu.util.CharacterParser;
 import com.example.lenovo.uu.util.CollectionUtils;
 import com.example.lenovo.uu.util.ImageLoadOptions;
 import com.example.lenovo.uu.util.PhotoUtil;
@@ -90,7 +92,7 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 		}*/
 		setContentView(R.layout.activity_set_info);
 		from = getIntent().getStringExtra("from");//me add other
-		if(from != null && from.equals("other")){
+		if(from != null && (from.equals("other") || from.equals("add") || from.equals("scan"))){
 			other_username = getIntent().getStringExtra("username");
 		}
 		initView();
@@ -124,52 +126,56 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 		btn_back = (Button) findViewById(R.id.btn_back);
 		btn_delete_friend = (Button)findViewById(R.id.btn_delete);
 		btn_add_friend = (Button) findViewById(R.id.btn_add_friend);
-		if (from.equals("me")) {
-			initTopBarForLeft("个人资料");
-			iv_nick_arrow.setVisibility(View.VISIBLE);
-			iv_account_arrow.setVisibility(View.VISIBLE);
-			iv_gender_arrow.setVisibility(View.VISIBLE);
-			iv_arrow.setVisibility(View.VISIBLE);
-			iv_email_arrow.setVisibility(View.VISIBLE);
-			iv_phone_arrow.setVisibility(View.VISIBLE);
-			btn_back.setVisibility(View.GONE);
-			btn_delete_friend.setVisibility(View.GONE);
-			btn_chat.setVisibility(View.GONE);
-			btn_add_friend.setVisibility(View.GONE);
-			layout_head.setOnClickListener(this);
-			layout_nick.setOnClickListener(this);
-			layout_email.setOnClickListener(this);
-			layout_account.setOnClickListener(this);
-			layout_phone.setOnClickListener(this);
-			layout_gender.setOnClickListener(this);
-			initMyData();
-		} else {
-			initTopBarForLeft("详细资料");
-			iv_phone_arrow.setVisibility(View.INVISIBLE);
-			iv_email_arrow.setVisibility(View.INVISIBLE);
-			iv_nick_arrow.setVisibility(View.INVISIBLE);
-			iv_account_arrow.setVisibility(View.INVISIBLE);
-			iv_gender_arrow.setVisibility(View.INVISIBLE);
-			iv_arrow.setVisibility(View.INVISIBLE);
-			//不管对方是不是你的好友，均可以发送消息--BmobIM_V1.1.2修改
-			btn_chat.setVisibility(View.VISIBLE);
-			btn_back.setVisibility(View.VISIBLE);
-			btn_chat.setOnClickListener(this);
-			btn_back.setOnClickListener(this);
+		if(from != null){
+			if (from.equals("me")) {
+				initTopBarForLeft("个人资料");
+				iv_nick_arrow.setVisibility(View.VISIBLE);
+				iv_account_arrow.setVisibility(View.VISIBLE);
+				iv_gender_arrow.setVisibility(View.VISIBLE);
+				iv_arrow.setVisibility(View.VISIBLE);
+				iv_email_arrow.setVisibility(View.VISIBLE);
+				iv_phone_arrow.setVisibility(View.VISIBLE);
+				btn_back.setVisibility(View.GONE);
+				btn_delete_friend.setVisibility(View.GONE);
+				btn_chat.setVisibility(View.GONE);
+				btn_add_friend.setVisibility(View.GONE);
+				layout_head.setOnClickListener(this);
+				layout_nick.setOnClickListener(this);
+				layout_email.setOnClickListener(this);
+				layout_account.setOnClickListener(this);
+				layout_phone.setOnClickListener(this);
+				layout_gender.setOnClickListener(this);
+				initMyData();
+			} else {
+				initTopBarForLeft("详细资料");
+				iv_phone_arrow.setVisibility(View.INVISIBLE);
+				iv_email_arrow.setVisibility(View.INVISIBLE);
+				iv_nick_arrow.setVisibility(View.INVISIBLE);
+				iv_account_arrow.setVisibility(View.INVISIBLE);
+				iv_gender_arrow.setVisibility(View.INVISIBLE);
+				iv_arrow.setVisibility(View.INVISIBLE);
+				//不管对方是不是你的好友，均可以发送消息--BmobIM_V1.1.2修改
+				btn_chat.setVisibility(View.VISIBLE);
+				btn_back.setVisibility(View.VISIBLE);
+				btn_chat.setOnClickListener(this);
+				btn_back.setOnClickListener(this);
 
-			if (mApplication.getContactList().containsKey(other_username)) {// 是好友
+				if (mApplication.getContactList().containsKey(other_username)) {// 是好友
 //					btn_chat.setVisibility(View.VISIBLE);
 //					btn_chat.setOnClickListener(this);
-				btn_add_friend.setVisibility(View.GONE);
-				btn_delete_friend.setVisibility(View.VISIBLE);
-				btn_delete_friend.setOnClickListener(this);
-			} else {
+					btn_add_friend.setVisibility(View.GONE);
+					btn_delete_friend.setVisibility(View.VISIBLE);
+					btn_delete_friend.setOnClickListener(this);
+				} else {
 //					btn_chat.setVisibility(View.GONE);
-				btn_delete_friend.setVisibility(View.GONE);
-				btn_add_friend.setVisibility(View.VISIBLE);
-				btn_add_friend.setOnClickListener(this);
+					btn_delete_friend.setVisibility(View.GONE);
+					btn_add_friend.setVisibility(View.VISIBLE);
+					btn_add_friend.setOnClickListener(this);
+				}
+				initOtherData(other_username);
 			}
-			initOtherData(other_username);
+		} else {
+			ShowToast("数据丢失！请重新加载！");
 		}
 	}
 
@@ -199,7 +205,11 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 
 			@Override
 			public void onSuccess(List<User> arg0) {
-				// TODO Auto-generated method stub
+/*				CharacterParser characterParser = CharacterParser.getInstance();
+				for (BmobChatUser sortModel : arg0) {
+					String name = sortModel.getUsername();
+					ShowLog("Set querry:" + name + "Sell:" + characterParser.getSelling(name));
+				}*/
 				if (arg0 != null && arg0.size() > 0) {
 					other_user = arg0.get(0);
 					updateUser(other_user);
@@ -226,29 +236,34 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 		tv_set_gender.setText(user.getSex() == true ? "男" : "女");
 		layout_two_code.setVisibility(View.VISIBLE);
 		layout_two_code.setOnClickListener(this);
-		if(from != null && from.equals("me")){
-			layout_head.setEnabled(true);
-			layout_nick.setEnabled(true);
-			layout_email.setEnabled(true);
-			layout_account.setEnabled(true);
-			layout_phone.setEnabled(true);
-			layout_gender.setEnabled(true);
-		} else if (from.equals("other")) {
-			btn_chat.setEnabled(true);
-			btn_back.setEnabled(true);
-			btn_delete_friend.setEnabled(true);
-			btn_add_friend.setEnabled(true);
-			// 检测是否为黑名单用户
-			if (BmobDB.create(this).isBlackUser(user.getUsername())) {
-				btn_back.setVisibility(View.GONE);
-				btn_delete_friend.setVisibility(View.GONE);
-				layout_black_tips.setVisibility(View.VISIBLE);
-			} else {
-				btn_back.setVisibility(View.VISIBLE);
+		if(from != null){
+			if(from.equals("me")){
+				layout_head.setEnabled(true);
+				layout_nick.setEnabled(true);
+				layout_email.setEnabled(true);
+				layout_account.setEnabled(true);
+				layout_phone.setEnabled(true);
+				layout_gender.setEnabled(true);
+			} else if (from.equals("other") || from.equals("add") || from.equals("scan")) {
+				btn_chat.setEnabled(true);
+				btn_back.setEnabled(true);
+				btn_delete_friend.setEnabled(true);
+				btn_add_friend.setEnabled(true);
+				// 检测是否为黑名单用户
+				if (BmobDB.create(this).isBlackUser(user.getUsername())) {
+					btn_back.setVisibility(View.GONE);
+					btn_delete_friend.setVisibility(View.GONE);
+					layout_black_tips.setVisibility(View.VISIBLE);
+				} else {
+					btn_back.setVisibility(View.VISIBLE);
 //				btn_delete_friend.setVisibility(View.VISIBLE);
-				layout_black_tips.setVisibility(View.GONE);
+					layout_black_tips.setVisibility(View.GONE);
+				}
 			}
+		} else {
+			ShowToast("数据丢失！请重新加载！");
 		}
+
 	}
 
 	/**
@@ -273,7 +288,7 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 		if(from != null){
 			if (from.equals("me")) {
 				initMyData();
-			} else if(from.equals("other")){
+			} else if(from.equals("other") || from.equals("add") || from.equals("scan")){
 				initOtherData(other_username);
 			}
 		} else {
@@ -317,12 +332,16 @@ public class SetMyInfoActivity extends ActivityBase implements OnClickListener {
 				break;
 			case R.id.layout_two_code:
 				Intent intent2 = new Intent(this, MyTwoCodeActivity.class);
-				if(from.equals("me")){
-					intent2.putExtra("user_name", myself.getUsername());
-				} else if(from.equals("other")){
-					intent2.putExtra("user_name", other_user.getUsername());
+				if(from != null){
+					if(from.equals("me")){
+						intent2.putExtra("user_name", myself.getUsername());
+					} else if(from.equals("other") || from.equals("add") || from.equals("scan")){
+						intent2.putExtra("user_name", other_user.getUsername());
+					}
+					startAnimActivity(intent2);
+				} else {
+					ShowToast("数据丢失！请重新加载！");
 				}
-				startAnimActivity(intent2);
 				break;
 			case R.id.btn_back:// 黑名单
 				showBlackDialog(other_user.getUsername());
