@@ -6,12 +6,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import cn.bmob.im.bean.BmobChatUser;
 import cn.bmob.im.util.BmobLog;
@@ -22,11 +25,18 @@ import com.example.lenovo.uu.config.BmobConstants;
 import com.example.lenovo.uu.util.CommonUtils;
 import com.example.lenovo.uu.view.dialog.DialogTips;
 
+import static java.security.AccessController.getContext;
+
 /**
  * @ClassName: LoginActivity
  */
 public class LoginActivity extends BaseActivity implements OnClickListener {
 
+	int i = 0;
+	static final int wrapper[] = {R.drawable.background1, R.drawable.background2, R.drawable.background3
+			, R.drawable.background4, R.drawable.background5};
+	RelativeLayout login_layout;
+	ImageView change;
 	EditText et_username, et_password;
 	Button btn_login;
 	TextView btn_register, btn_login_by_phone, btn_register_no_phone;
@@ -47,6 +57,9 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	}
 	
 	private void init() {
+		login_layout = (RelativeLayout)findViewById(R.id.login_layout);
+		change = (ImageView) findViewById(R.id.iv_icon);
+		change.setOnClickListener(this);
 		et_username = (EditText) findViewById(R.id.et_username);
 		et_password = (EditText) findViewById(R.id.et_password);
 		btn_login = (Button) findViewById(R.id.btn_login);
@@ -73,6 +86,11 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()){
+			case R.id.iv_icon:
+				login_layout.setBackground(LoginActivity.this.getResources()
+						.getDrawable(wrapper[i]));
+				i = (i + 1) % 5;
+				break;
 			case R.id.btn_register:
 				Intent intent = new Intent(LoginActivity.this,	RegisterInPhone.class);
 				intent.putExtra("from", "register");

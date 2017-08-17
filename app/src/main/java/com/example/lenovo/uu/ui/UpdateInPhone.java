@@ -225,8 +225,8 @@ public class UpdateInPhone extends ActivityBase implements OnClickListener{
 								btn_send_ver_message.setBackground(UpdateInPhone.this.getResources()
 										.getDrawable(R.drawable.register_btn_shape));
 								btn_register_next.setEnabled(false);
-								btn_register_next.setBackground(UpdateInPhone.this.getResources()
-										.getDrawable(R.drawable.register_btn_shape));
+									btn_register_next.setBackground(UpdateInPhone.this.getResources()
+											.getDrawable(R.drawable.register_btn_shape));
 								et_phone.requestFocus();
 							}
 							/*Intent intent = new Intent(UpdateInPhone.this,RegisterActivity.class);
