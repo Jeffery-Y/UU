@@ -40,9 +40,6 @@ public class SettingsFragment extends FragmentBase implements OnClickListener{
 			rl_switch_vibrate,layout_blacklist;
 
 	SwitchButton iv_notification, iv_voice, iv_vibrate;
-
-	/*ImageView iv_open_notification, iv_close_notification, iv_open_voice,
-			iv_close_voice, iv_open_vibrate, iv_close_vibrate;*/
 	
 	View view1,view2;
 	SharePreferenceUtil mSharedUtil;

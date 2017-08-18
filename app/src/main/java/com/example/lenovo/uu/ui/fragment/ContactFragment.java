@@ -267,8 +267,7 @@ public class ContactFragment extends FragmentBase implements OnItemClickListener
 		right_letter.setOnTouchingLetterChangedListener(new LetterListViewListener());
 	}
 
-	private class LetterListViewListener implements
-			OnTouchingLetterChangedListener {
+	private class LetterListViewListener implements OnTouchingLetterChangedListener {
 
 		@Override
 		public void onTouchingLetterChanged(String s) {
