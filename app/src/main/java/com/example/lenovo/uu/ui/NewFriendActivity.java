@@ -17,7 +17,7 @@ import com.example.lenovo.uu.bean.User;
 import com.example.lenovo.uu.view.dialog.DialogTips;
 
 /** 新朋友 */
-public class NewFriendActivity extends ActivityBase implements OnItemLongClickListener{
+public class NewFriendActivity extends ActivityBase implements OnItemClickListener,OnItemLongClickListener{
 	
 	ListView listview;
 	
@@ -38,6 +38,7 @@ public class NewFriendActivity extends ActivityBase implements OnItemLongClickLi
 		initTopBarForLeft("新朋友");
 		listview = (ListView)findViewById(R.id.list_newfriend);
 		listview.setOnItemLongClickListener(this);
+		listview.setOnItemClickListener(NewFriendActivity.this);
 		adapter = new NewFriendAdapter(this, BmobDB.create(this).queryBmobInviteList());
 		listview.setAdapter(adapter);
 		if(from==null){//若来自通知栏的点击，则定位到最后一条
@@ -45,6 +46,17 @@ public class NewFriendActivity extends ActivityBase implements OnItemLongClickLi
 		}
 	}
 
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+		// TODO Auto-generated method stub
+		ShowLog("点击了某个对象");
+		BmobInvitation user = (BmobInvitation) adapter.getItem(position);
+		//先进入好友的详细资料页面
+		Intent intent =new Intent(NewFriendActivity.this,SetMyInfoActivity.class);
+		intent.putExtra("from", "other");
+		intent.putExtra("username", user.getFromname());
+		startAnimActivity(intent);
+	}
 
 	@Override
 	public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long arg3) {

@@ -4,11 +4,13 @@ import java.util.List;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import cn.bmob.im.BmobUserManager;
 import cn.bmob.im.bean.BmobInvitation;
@@ -21,6 +23,7 @@ import com.example.lenovo.uu.CustomApplcation;
 import com.example.lenovo.uu.R;
 import com.example.lenovo.uu.adapter.base.BaseListAdapter;
 import com.example.lenovo.uu.adapter.base.ViewHolder;
+import com.example.lenovo.uu.ui.SetMyInfoActivity;
 import com.example.lenovo.uu.util.CollectionUtils;
 import com.example.lenovo.uu.util.ImageLoadOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -44,7 +47,6 @@ public class NewFriendAdapter extends BaseListAdapter<BmobInvitation> {
 		ImageView iv_avatar = ViewHolder.get(convertView, R.id.avatar);
 		
 		final Button btn_add = ViewHolder.get(convertView, R.id.btn_add);
-
 		String avatar = msg.getAvatar();
 
 		if (avatar != null && !avatar.equals("")) {
