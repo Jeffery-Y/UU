@@ -2,20 +2,25 @@ package com.example.lenovo.uu.ui;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
@@ -25,6 +30,7 @@ import android.text.Selection;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -37,6 +43,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,6 +64,7 @@ import cn.bmob.im.inteface.UploadListener;
 import cn.bmob.im.util.BmobLog;
 import cn.bmob.v3.listener.PushListener;
 
+import com.example.lenovo.uu.util.JsonParser;
 import com.example.lenovo.uu.MyMessageReceiver;
 import com.example.lenovo.uu.R;
 import com.example.lenovo.uu.adapter.EmoViewPagerAdapter;
@@ -72,14 +80,38 @@ import com.example.lenovo.uu.view.HeaderLayout;
 import com.example.lenovo.uu.view.dialog.DialogTips;
 import com.example.lenovo.uu.view.xlist.XListView;
 import com.example.lenovo.uu.view.xlist.XListView.IXListViewListener;
+import com.iflytek.cloud.ErrorCode;
+import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechRecognizer;
+import com.iflytek.cloud.ui.RecognizerDialog;
+import com.iflytek.cloud.ui.RecognizerDialogListener;
+import com.iflytek.sunflower.FlowerCollector;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * 聊天界面
  */
 public class ChatActivity extends ActivityBase implements OnClickListener,
 		IXListViewListener, EventListener {
+	// 用HashMap存储听写结果
+	private HashMap<String, String> mIatResults = new LinkedHashMap<String, String>();
 
-	private Button btn_chat_emo_normal, btn_chat_emo_press, btn_chat_send, btn_chat_add_normal, btn_chat_add_press,btn_chat_keyboard, btn_speak, btn_chat_voice;
+	// 语音听写对象
+	private SpeechRecognizer mIat;
+	// 语音听写UI
+	private RecognizerDialog mIatDialog;
+	// 引擎类型
+	private String mEngineType = SpeechConstant.TYPE_CLOUD;
+
+	private boolean mTranslateEnable = false;
+	private SharedPreferences mSharedPreferences;
+
+	private Button btn_chat_emo_normal, btn_chat_emo_press, btn_chat_send, btn_chat_add_normal,
+			btn_speak_recognizer, btn_chat_add_press,btn_chat_keyboard, btn_speak, btn_chat_voice;
 
 	XListView mListView;
 
@@ -121,6 +153,34 @@ public class ChatActivity extends ActivityBase implements OnClickListener,
 		//注册广播接收器
 		initNewMessageBroadCast();
 		initView();
+
+		////////////
+		// 初始化听写Dialog，如果只使用有UI听写功能，无需创建SpeechRecognizer
+		// 使用UI听写功能，请根据sdk文件目录下的notice.txt,放置布局文件和图片资源
+		mIatDialog = new RecognizerDialog(ChatActivity.this, null);
+		//2.设置accent、language等参数
+		mIatDialog.setParameter(SpeechConstant.LANGUAGE, "zh_cn");//语种，这里可以有zh_cn和en_us
+		mIatDialog.setParameter(SpeechConstant.ACCENT, "mandarin");//设置口音，这里设置的是汉语普通话 具体支持口音请查看讯飞文档，
+		mIatDialog.setParameter(SpeechConstant.TEXT_ENCODING, "utf-8");//设置编码类型
+
+		/*//其他设置请参考文档http://www.xfyun.cn/doccenter/awd
+		//3.设置讯飞识别语音后的回调监听
+		mIatDialog.setListener(new RecognizerDialogListener() {
+			@Override
+			public void onResult(RecognizerResult recognizerResult, boolean b) {//返回结果
+				if (!b) {
+					Log.i("讯飞识别的结果", recognizerResult.getResultString());
+				}
+			}
+
+			@Override
+			public void onError(SpeechError speechError) {//返回错误
+				Log.e("返回的错误码", speechError.getErrorCode() + "");
+			}
+
+		});
+		//显示讯飞语音识别视图
+		mIatDialog.show();*/
 	}
 	
 	private void initRecordManager(){
@@ -393,6 +453,8 @@ public class ChatActivity extends ActivityBase implements OnClickListener,
 		// 最中间
 		// 语音框
 		btn_speak = (Button) findViewById(R.id.btn_speak);
+		btn_speak_recognizer = (Button)findViewById(R.id.btn_speak_recognizer);
+		btn_speak_recognizer.setOnClickListener(this);
 		// 输入框
 		edit_user_comment = (EmoticonsEditText) findViewById(R.id.edit_user_comment);
 		edit_user_comment.setOnClickListener(this);
@@ -643,6 +705,32 @@ public class ChatActivity extends ActivityBase implements OnClickListener,
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
+			case R.id.btn_speak_recognizer:
+				// 移动数据分析，收集开始听写事件
+				FlowerCollector.onEvent(ChatActivity.this, "iat_recognize");
+
+//				mResultText.setText(null);// 清空显示内容
+				mIatResults.clear();
+				// 设置参数
+//				setParam();
+				/*boolean isShowDialog = mSharedPreferences.getBoolean(
+						getString(R.string.pref_key_iat_show), true);*/
+				if (true) {
+					// 显示听写对话框
+					mIatDialog.setListener(mRecognizerDialogListener);
+					mIatDialog.show();
+					ShowToast(getString(R.string.text_begin));
+				} else {
+					// 不显示听写对话框
+					ShowToast(" 不显示听写对话框" );
+/*ret = mIat.startListening(mRecognizerListener);
+					if (ret != ErrorCode.SUCCESS) {
+						ShowToast("听写失败,错误码：" + ret);
+					} else {
+						ShowToast(getString(R.string.text_begin));
+					}*/
+				}
+				break;
 			case R.id.edit_user_comment:// 点击文本输入框
 				mListView.setSelection(mListView.getCount() - 1);
 				if (layout_more.getVisibility() == View.VISIBLE) {
@@ -656,6 +744,7 @@ public class ChatActivity extends ActivityBase implements OnClickListener,
 				layout_add.setVisibility(View.GONE);
 				if (layout_more.getVisibility() == View.GONE) {
 					edit_user_comment.setVisibility(View.VISIBLE);
+					btn_speak_recognizer.setVisibility(View.VISIBLE);
 					if(btn_chat_keyboard.getVisibility() == View.VISIBLE){
 						btn_chat_keyboard.setVisibility(View.GONE);
 						btn_chat_voice.setVisibility(View.VISIBLE);
@@ -691,6 +780,7 @@ public class ChatActivity extends ActivityBase implements OnClickListener,
 			case R.id.btn_chat_voice:// 语音按钮
 				removeMoreLayout();
 				edit_user_comment.setVisibility(View.GONE);
+				btn_speak_recognizer.setVisibility(View.GONE);
 				btn_chat_voice.setVisibility(View.GONE);
 				btn_chat_keyboard.setVisibility(View.VISIBLE);
 				btn_speak.setVisibility(View.VISIBLE);
@@ -698,6 +788,7 @@ public class ChatActivity extends ActivityBase implements OnClickListener,
 				break;
 			case R.id.btn_chat_keyboard:// 键盘按钮，点击就弹出键盘并隐藏掉声音按钮
 				edit_user_comment.setVisibility(View.VISIBLE);
+				btn_speak_recognizer.setVisibility(View.VISIBLE);
 				btn_chat_keyboard.setVisibility(View.GONE);
 				btn_chat_voice.setVisibility(View.VISIBLE);
 				btn_speak.setVisibility(View.GONE);
@@ -734,6 +825,58 @@ public class ChatActivity extends ActivityBase implements OnClickListener,
 			default:
 				break;
 		}
+	}
+
+	/**
+	 * 听写UI监听器
+	 */
+	private RecognizerDialogListener mRecognizerDialogListener = new RecognizerDialogListener() {
+		public void onResult(RecognizerResult results, boolean isLast) {
+			printResult(results);
+		}
+
+		/**
+		 * 识别回调错误.
+		 */
+		public void onError(SpeechError error) {
+			if(mTranslateEnable && error.getErrorCode() == 14002) {
+				ShowToast( error.getPlainDescription(true)+"\n请确认是否已开通翻译功能" );
+			} else {
+				ShowToast(error.getPlainDescription(true));
+			}
+		}
+
+	};
+
+	private void printResult(RecognizerResult results) {
+		String text = JsonParser.parseIatResult(results.getResultString());
+
+		String sn = null;
+		// 读取json结果中的sn字段
+		try {
+			JSONObject resultJson = new JSONObject(results.getResultString());
+			sn = resultJson.optString("sn");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		mIatResults.put(sn, text);
+
+		StringBuffer resultBuffer = new StringBuffer();
+		for (String key : mIatResults.keySet()) {
+			resultBuffer.append(mIatResults.get(key));
+		}
+
+		int index = edit_user_comment.getSelectionStart();//获取光标所在位置
+		Editable edit = edit_user_comment.getEditableText();//获取EditText的文字
+		if (index < 0 || index >= edit.length() ){
+			edit.append(text);
+		}else{
+			edit.insert(index,text);//光标所在位置插入文字
+		}
+
+//		edit_user_comment.setText(resultBuffer.toString());
+//		edit_user_comment.setSelection(edit_user_comment.length());
 	}
 
 	/**

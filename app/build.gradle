@@ -28,6 +28,9 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
+    compile files('libs/Msc.jar')
+    compile files('libs/Sunflower.jar')
     //    compile 'com.github.LidongWen:StickyDot:1.1.0'
 //    compile 'com.gyf.barlibrary:barlibrary:2.2.7'
 //    compile 'com.github.XuDaojie:QRCode-Android:v0.4.2'
