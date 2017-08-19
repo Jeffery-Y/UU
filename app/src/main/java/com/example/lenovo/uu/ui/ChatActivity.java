@@ -1248,6 +1248,12 @@ public class ChatActivity extends ActivityBase implements OnClickListener,
 			unregisterReceiver(receiver);
 		} catch (Exception e) {
 		}
+
+        if( null != mIat ){
+            // 退出时释放连接
+            mIat.cancel();
+            mIat.destroy();
+        }
 		
 	}
 
