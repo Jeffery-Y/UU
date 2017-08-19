@@ -94,8 +94,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 		progress.setMessage("正在注册...");
 		progress.setCanceledOnTouchOutside(false);
 		progress.show();
-		//由于每个应用的注册所需的资料都不一样，故IM sdk未提供注册方法，用户可按照bmod SDK的注册方式进行注册。
-		//注册的时候需要注意两点：1、User表中绑定设备id和type，2、设备表中绑定username字段
+		//1、User表中绑定设备id和type，2、设备表中绑定username字段
 		final User bu = new User();
 		bu.setUsername(name);
 		bu.setNick(name);
@@ -118,9 +117,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 				//更新地理位置信息
 				updateUserLocation();
 				//发广播通知登陆页面退出
-				sendBroadcast(new Intent(BmobConstants.ACTION_REGISTER_SUCCESS_FINISH));
+				sendBroadcast(new Intent(BmobConstants
+						.ACTION_REGISTER_SUCCESS_FINISH));
 				// 启动主页
-				Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
+				Intent intent = new Intent(RegisterActivity.this
+						,MainActivity.class);
 				startActivity(intent);
 				finish();
 			}

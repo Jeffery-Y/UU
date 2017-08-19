@@ -13,7 +13,7 @@ import cn.bmob.im.util.BmobLog;
 import com.example.lenovo.uu.R;
 
 /**
- * 播放录音文件--弃用，会出现播放错位，暂时还未解决.
+ * 播放录音文件
  */
 public class RecordPlayClickListener implements View.OnClickListener {
 

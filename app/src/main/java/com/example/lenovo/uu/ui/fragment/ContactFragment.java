@@ -151,7 +151,8 @@ public class ContactFragment extends FragmentBase implements OnItemClickListener
 				if (name != null) {
 					if (name.indexOf(characterParser.getSelling(filterStr.toString())) != -1 ||
 							name.indexOf(filterStr.toString()) != -1||
-							characterParser.getSelling(name).contains(characterParser.getSelling(filterStr.toString()))) {
+							characterParser.getSelling(name).contains(
+									characterParser.getSelling(filterStr.toString()))) {
 						filterDateList.add(sortModel);
 					}
 				}

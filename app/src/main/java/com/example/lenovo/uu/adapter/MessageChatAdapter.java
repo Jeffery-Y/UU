@@ -98,16 +98,14 @@ public class MessageChatAdapter extends BaseListAdapter<BmobMsg> {
 		currentObjectId = BmobUserManager.getInstance(context).getCurrentUserObjectId();
 
 
+		//设置播放器音频流类型
+//		mTts.setParameter(SpeechConstant.STREAM_TYPE, "3");
 		// 初始化合成对象
 		mTts = SpeechSynthesizer.createSynthesizer(mContext, mTtsInitListener);
 		mToast = Toast.makeText(mContext,"",Toast.LENGTH_SHORT);
-		//设置播放器音频流类型
-		mTts.setParameter(SpeechConstant.STREAM_TYPE, "3");
 		// 设置播放合成音频打断音乐播放，默认为true
 		mTts.setParameter(SpeechConstant.KEY_REQUEST_FOCUS, "true");
-
 		// 设置音频保存路径，保存音频格式支持pcm、wav，设置路径为sd卡请注意WRITE_EXTERNAL_STORAGE权限
-		// 注：AUDIO_FORMAT参数语记需要更新版本才能生效
 		mTts.setParameter(SpeechConstant.AUDIO_FORMAT, "wav");
 		mTts.setParameter(SpeechConstant.TTS_AUDIO_PATH, Environment.getExternalStorageDirectory()+"/msc/tts.wav");
 
@@ -424,43 +422,25 @@ public class MessageChatAdapter extends BaseListAdapter<BmobMsg> {
 		}
 	};
 
-	/**
-	 * 合成回调监听。
-	 */
-	private SynthesizerListener mTtsListener = new SynthesizerListener() {
 
+	//合成回调监听
+	private SynthesizerListener mTtsListener = new SynthesizerListener() {
 		@Override
 		public void onSpeakBegin() {
 			ShowToast("开始播放");
 		}
-
 		@Override
-		public void onSpeakPaused() {
-			ShowToast("暂停播放");
-		}
-
-		@Override
-		public void onSpeakResumed() {
-			ShowToast("继续播放");
-		}
-
-		@Override
-		public void onBufferProgress(int percent, int beginPos, int endPos,
-									 String info) {
+		public void onBufferProgress(int percent, int beginPos, int endPos, String info) {
 			// 合成进度
 			mPercentForBuffering = percent;
-			ShowToast(String.format("缓冲进度为%d%%，播放进度为%d%%",
-					mPercentForBuffering, mPercentForPlaying));
+			ShowToast(String.format("缓冲进度为%d%%，播放进度为%d%%", mPercentForBuffering, mPercentForPlaying));
 		}
-
 		@Override
 		public void onSpeakProgress(int percent, int beginPos, int endPos) {
 			// 播放进度
 			mPercentForPlaying = percent;
-			ShowToast(String.format("缓冲进度为%d%%，播放进度为%d%%",
-					mPercentForBuffering, mPercentForPlaying));
+			ShowToast(String.format("缓冲进度为%d%%，播放进度为%d%%", mPercentForBuffering, mPercentForPlaying));
 		}
-
 		@Override
 		public void onCompleted(SpeechError error) {
 			if (error == null) {
@@ -469,7 +449,14 @@ public class MessageChatAdapter extends BaseListAdapter<BmobMsg> {
 				ShowToast(error.getPlainDescription(true));
 			}
 		}
-
+		@Override
+		public void onSpeakPaused() {
+			ShowToast("暂停播放");
+		}
+		@Override
+		public void onSpeakResumed() {
+			ShowToast("继续播放");
+		}
 		@Override
 		public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
 			// 以下代码用于获取与云端的会话id，当业务出错时将会话id提供给技术支持人员，可用于查询会话日志，定位出错原因

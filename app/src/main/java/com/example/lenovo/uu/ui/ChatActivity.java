@@ -154,12 +154,11 @@ public class ChatActivity extends ActivityBase implements OnClickListener,
 		initNewMessageBroadCast();
 		initView();
 
-		// 初始化听写Dialog，如果只使用有UI听写功能，无需创建SpeechRecognizer
-		// 使用UI听写功能，请根据sdk文件目录下的notice.txt,放置布局文件和图片资源
+		// 初始化听写Dialog
 		mIatDialog = new RecognizerDialog(ChatActivity.this, null);
 		//2.设置accent、language等参数
-		mIatDialog.setParameter(SpeechConstant.LANGUAGE, "zh_cn");//语种，这里可以有zh_cn和en_us
-		mIatDialog.setParameter(SpeechConstant.ACCENT, "mandarin");//设置口音，这里设置的是汉语普通话 具体支持口音请查看讯飞文档，
+		mIatDialog.setParameter(SpeechConstant.LANGUAGE, "zh_cn");//语种，有zh_cn和en_us
+		mIatDialog.setParameter(SpeechConstant.ACCENT, "mandarin");//设置口音，汉语普通话
 		mIatDialog.setParameter(SpeechConstant.TEXT_ENCODING, "utf-8");//设置编码类型
 	}
 	
@@ -294,33 +293,16 @@ public class ChatActivity extends ActivityBase implements OnClickListener,
 		}
 	}
 
-	/**
-	 * 发送语音消息
-	 * @Title: sendImageMessage
-	 * @Description: TODO
-	 * @param @param localPath
-	 * @return void
-	 * @throws
-	 */
+
+	//发送语音消息
 	private void sendVoiceMessage(String local, int length) {
-		manager.sendVoiceMessage(targetUser, local, length,
-				new UploadListener() {
-
+		manager.sendVoiceMessage(targetUser, local, length, new UploadListener() {
 					@Override
-					public void onStart(BmobMsg msg) {
-						// TODO Auto-generated method stub
-						refreshMessage(msg);
-					}
-
+					public void onStart(BmobMsg msg) {refreshMessage(msg);}
 					@Override
-					public void onSuccess() {
-						// TODO Auto-generated method stub
-						mAdapter.notifyDataSetChanged();
-					}
-
+					public void onSuccess() {mAdapter.notifyDataSetChanged();}
 					@Override
 					public void onFailure(int error, String arg1) {
-						// TODO Auto-generated method stub
 						ShowLog("上传语音失败 -->arg1：" + arg1);
 						mAdapter.notifyDataSetChanged();
 					}
@@ -798,10 +780,7 @@ public class ChatActivity extends ActivityBase implements OnClickListener,
 		public void onResult(RecognizerResult results, boolean isLast) {
 			printResult(results);
 		}
-
-		/**
-		 * 识别回调错误.
-		 */
+		//识别回调错误
 		public void onError(SpeechError error) {
 			if(mTranslateEnable && error.getErrorCode() == 14002) {
 				ShowToast( error.getPlainDescription(true)+"\n请确认是否已开通翻译功能" );
@@ -980,20 +959,17 @@ public class ChatActivity extends ActivityBase implements OnClickListener,
 			removeMoreLayout();
 		}
 		manager.sendImageMessage(targetUser, local, new UploadListener() {
-
 			@Override
 			public void onStart(BmobMsg msg) {
 				// TODO Auto-generated method stub
 				ShowLog("开始上传onStart：" + msg.getContent() + ",状态：" + msg.getStatus());
 				refreshMessage(msg);
 			}
-
 			@Override
 			public void onSuccess() {
 				// TODO Auto-generated method stub
 				mAdapter.notifyDataSetChanged();
 			}
-
 			@Override
 			public void onFailure(int error, String arg1) {
 				// TODO Auto-generated method stub

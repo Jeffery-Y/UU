@@ -138,9 +138,8 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 						@Override
 						public void done(Integer smsId, BmobException ex) {
 							if(ex == null){
-								toast("send ok " + smsId);
+								toast("验证码已发送成功！");
 								RegisterInPhone.this.smsId = smsId;
-//								et_smsid.setText(smsId+"");
 								Log.e("demo", ""+smsId);
 								register_messge.setVisibility(View.VISIBLE);
 								register_message_hint.setVisibility(View.VISIBLE);
@@ -150,7 +149,6 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 
 									@Override
 									public void onTextChanged(CharSequence s, int start, int before, int count) {
-										// TODO Auto-generated method stub
 										if (!et_phone.getText().toString().isEmpty()) {
 											btn_register_next.setEnabled(true);
 											btn_register_next.setBackground(RegisterInPhone.this.getResources().getDrawable(R.drawable.btn_login_selector));
@@ -162,13 +160,10 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 
 									@Override
 									public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-										// TODO Auto-generated method stub
-
 									}
 
 									@Override
 									public void afterTextChanged(Editable s) {
-										// TODO Auto-generated method stub
 									}
 								});
 							}else {

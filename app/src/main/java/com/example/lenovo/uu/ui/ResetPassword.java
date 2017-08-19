@@ -85,12 +85,17 @@ public class ResetPassword extends BaseActivity implements View.OnClickListener{
         String pwd_again = re_et_password.getText().toString();
 
         if(from != null && from.equals("reset_password_by_old")){
-            String ole_password = et_old_password.getText().toString();
-            if (TextUtils.isEmpty(ole_password)) {
+            String in_ole_password = et_old_password.getText().toString();
+            String user_old_password = user.getPassword();
+            if (TextUtils.isEmpty(in_ole_password)) {
                 ShowToast(R.string.toast_error_password_null);
                 return;
             }
-            if(!ole_password.equals(user.getPassword().toString())){
+            if (TextUtils.isEmpty(user_old_password)) {
+                ShowToast("查询该用户失败！");
+                return;
+            }
+            if(!in_ole_password.equals(user_old_password)){
                 ShowToast("旧密码有误！");
                 return;
             }
