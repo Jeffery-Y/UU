@@ -168,8 +168,11 @@ public class AddFriendActivity extends ActivityBase implements OnClickListener,I
 						String name = sortModel.getUsername();
 						ShowLog("Add querry by page0:" + name + "Sell:" + characterParser.getSelling(name));
 						if (name != null) {
-							if (name.indexOf(characterParser.getSelling(vague_search_name)) != -1 ||
-									characterParser.getSelling(name).contains(characterParser.getSelling(vague_search_name))) {
+							if (name.indexOf(characterParser.getSelling(vague_search_name.toString())) != -1 ||
+									name.indexOf(vague_search_name.toString()) != -1||
+									characterParser.getSelling(name).contains(characterParser.getSelling(vague_search_name.toString())))
+								/*(name.indexOf(characterParser.getSelling(vague_search_name)) != -1 ||
+									characterParser.getSelling(name).contains(characterParser.getSelling(vague_search_name)))*/ {
 								ShowLog("Add in adapter:" + name);
 								filterDateList.add(sortModel);
 							}

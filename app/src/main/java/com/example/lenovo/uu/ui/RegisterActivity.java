@@ -26,7 +26,7 @@ import com.example.lenovo.uu.util.CommonUtils;
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener{
 	private String phonenumber = "", from = "";
-	Button btn_register, registr_in_back;
+	Button btn_register, register_in_back;
 	EditText et_username, et_password, re_et_password;
 	BmobChatUser currentUser;
 
@@ -47,8 +47,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
 		btn_register = (Button) findViewById(R.id.btn_register);
 		btn_register.setOnClickListener(this);
-		registr_in_back = (Button) findViewById(R.id.btn_register);
-		registr_in_back.setOnClickListener(this);
+		register_in_back = (Button) findViewById(R.id.register_in_back);
+		register_in_back.setOnClickListener(this);
 	}
 
 	@Override

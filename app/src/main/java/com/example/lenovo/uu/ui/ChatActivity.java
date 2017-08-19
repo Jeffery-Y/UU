@@ -154,7 +154,6 @@ public class ChatActivity extends ActivityBase implements OnClickListener,
 		initNewMessageBroadCast();
 		initView();
 
-		////////////
 		// 初始化听写Dialog，如果只使用有UI听写功能，无需创建SpeechRecognizer
 		// 使用UI听写功能，请根据sdk文件目录下的notice.txt,放置布局文件和图片资源
 		mIatDialog = new RecognizerDialog(ChatActivity.this, null);
@@ -162,25 +161,6 @@ public class ChatActivity extends ActivityBase implements OnClickListener,
 		mIatDialog.setParameter(SpeechConstant.LANGUAGE, "zh_cn");//语种，这里可以有zh_cn和en_us
 		mIatDialog.setParameter(SpeechConstant.ACCENT, "mandarin");//设置口音，这里设置的是汉语普通话 具体支持口音请查看讯飞文档，
 		mIatDialog.setParameter(SpeechConstant.TEXT_ENCODING, "utf-8");//设置编码类型
-
-		/*//其他设置请参考文档http://www.xfyun.cn/doccenter/awd
-		//3.设置讯飞识别语音后的回调监听
-		mIatDialog.setListener(new RecognizerDialogListener() {
-			@Override
-			public void onResult(RecognizerResult recognizerResult, boolean b) {//返回结果
-				if (!b) {
-					Log.i("讯飞识别的结果", recognizerResult.getResultString());
-				}
-			}
-
-			@Override
-			public void onError(SpeechError speechError) {//返回错误
-				Log.e("返回的错误码", speechError.getErrorCode() + "");
-			}
-
-		});
-		//显示讯飞语音识别视图
-		mIatDialog.show();*/
 	}
 	
 	private void initRecordManager(){
@@ -709,27 +689,11 @@ public class ChatActivity extends ActivityBase implements OnClickListener,
 				// 移动数据分析，收集开始听写事件
 				FlowerCollector.onEvent(ChatActivity.this, "iat_recognize");
 
-//				mResultText.setText(null);// 清空显示内容
 				mIatResults.clear();
-				// 设置参数
-//				setParam();
-				/*boolean isShowDialog = mSharedPreferences.getBoolean(
-						getString(R.string.pref_key_iat_show), true);*/
-				if (true) {
-					// 显示听写对话框
-					mIatDialog.setListener(mRecognizerDialogListener);
-					mIatDialog.show();
-					ShowToast(getString(R.string.text_begin));
-				} else {
-					// 不显示听写对话框
-					ShowToast(" 不显示听写对话框" );
-/*ret = mIat.startListening(mRecognizerListener);
-					if (ret != ErrorCode.SUCCESS) {
-						ShowToast("听写失败,错误码：" + ret);
-					} else {
-						ShowToast(getString(R.string.text_begin));
-					}*/
-				}
+				// 显示听写对话框
+				mIatDialog.setListener(mRecognizerDialogListener);
+				mIatDialog.show();
+				ShowToast(getString(R.string.text_begin));
 				break;
 			case R.id.edit_user_comment:// 点击文本输入框
 				mListView.setSelection(mListView.getCount() - 1);

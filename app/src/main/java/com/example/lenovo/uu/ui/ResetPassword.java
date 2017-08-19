@@ -26,7 +26,7 @@ import com.example.lenovo.uu.util.CommonUtils;
 
 public class ResetPassword extends BaseActivity implements View.OnClickListener{
     LinearLayout old_password_layout;
-    Button btn_register, registr_in_back;
+    Button btn_register, register_in_back;
     EditText et_username, et_password, re_et_password, et_old_password;
     TextView register_account_hint_text;
     BmobChatUser currentUser;
@@ -62,8 +62,8 @@ public class ResetPassword extends BaseActivity implements View.OnClickListener{
         btn_register = (Button) findViewById(R.id.btn_register);
         btn_register.setText("修改密码");
         btn_register.setOnClickListener(this);
-        registr_in_back = (Button) findViewById(R.id.btn_register);
-        registr_in_back.setOnClickListener(this);
+        register_in_back = (Button) findViewById(R.id.register_in_back);
+        register_in_back.setOnClickListener(this);
     }
 
     @Override

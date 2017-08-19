@@ -43,7 +43,7 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 	LinearLayout register_messge, register_message_hint;
 	TextView input_phone;
 	EditText et_country, et_phone, et_ver_code;
-	Button btn_register_next, btn_send_ver_message, registr_in_back;
+	Button btn_register_next, btn_send_ver_message, register_in_back;
 
 //	Context context;
 	String from = "";
@@ -85,11 +85,11 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 		et_ver_code = (EditText) findViewById(R.id.et_ver_code);
 		btn_register_next = (Button) findViewById(R.id.btn_register_next);
 		btn_send_ver_message = (Button) findViewById(R.id.btn_send_ver_message);
-		registr_in_back = (Button) findViewById(R.id.registr_in_back);
+		register_in_back = (Button) findViewById(R.id.registr_in_back);
 		btn_register_next.setOnClickListener(this);
 		btn_send_ver_message.setOnClickListener(this);
 		btn_send_ver_message.setEnabled(false);
-		registr_in_back.setOnClickListener(this);
+		register_in_back.setOnClickListener(this);
 
 		et_phone.addTextChangedListener(new TextWatcher() {
 

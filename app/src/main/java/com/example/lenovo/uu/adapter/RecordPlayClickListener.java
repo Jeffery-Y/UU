@@ -14,9 +14,6 @@ import com.example.lenovo.uu.R;
 
 /**
  * 播放录音文件--弃用，会出现播放错位，暂时还未解决.
- * @ClassName: RecordPlayClickListener
- * @Description: TODO
- * @author smile
  */
 public class RecordPlayClickListener implements View.OnClickListener {
 

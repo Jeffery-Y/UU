@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,16 +25,22 @@ import com.example.lenovo.uu.ui.AddFriendActivity;
 import com.example.lenovo.uu.ui.ChatActivity;
 import com.example.lenovo.uu.ui.FragmentBase;
 import com.example.lenovo.uu.ui.SetMyInfoActivity;
+import com.example.lenovo.uu.util.CharacterParser;
 import com.example.lenovo.uu.view.ClearEditText;
 import com.example.lenovo.uu.view.HeaderLayout;
 import com.example.lenovo.uu.view.dialog.DialogTips;
 import com.example.lenovo.uu.widge.CircleRefreshLayout;
 
+import java.util.List;
+
 import static android.R.attr.delay;
 
 /** 最近会话 */
 public class RecentFragment extends FragmentBase implements OnItemClickListener,OnItemLongClickListener{
-
+	/**
+	 * 汉字转换成拼音的类
+	 */
+	private CharacterParser characterParser;
 	ClearEditText mClearEditText;
 	private CircleRefreshLayout mRefreshLayout;/////////////////////
 	ListView listview;
@@ -46,6 +53,7 @@ public class RecentFragment extends FragmentBase implements OnItemClickListener,
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		characterParser = CharacterParser.getInstance();
 		initView();
 	}
 	
@@ -67,11 +75,32 @@ public class RecentFragment extends FragmentBase implements OnItemClickListener,
 		listview.setAdapter(adapter);
 
 		mClearEditText = (ClearEditText)findViewById(R.id.et_msg_search);
+		mClearEditText.setCursorVisible(false);
 		mClearEditText.addTextChangedListener(new TextWatcher() {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				adapter.getFilter().filter(s);
+				//
+				// adapter.getFilter().filter(s);
+				String filterStr = mClearEditText.getText().toString();
+
+				if(!TextUtils.isEmpty(filterStr)){
+					adapter.clear();
+					List<BmobRecent> recent_conversations = BmobDB.create(getActivity()).queryRecents();
+					for(BmobRecent item : recent_conversations){
+						String name = item.getUserName();
+						if (name != null) {
+							if (name.indexOf(characterParser.getSelling(filterStr.toString())) != -1 ||
+									name.indexOf(filterStr.toString()) != -1||
+									characterParser.getSelling(name).contains(characterParser.getSelling(filterStr.toString()))) {
+								adapter.add(item);
+							}
+						}
+					}
+				} else {
+					adapter = new MessageRecentAdapter(getActivity(), R.layout.item_conversation, BmobDB.create(getActivity()).queryRecents());
+				}
+				listview.setAdapter(adapter);
 			}
 
 			@Override

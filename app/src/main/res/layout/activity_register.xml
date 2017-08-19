@@ -7,7 +7,7 @@
     android:orientation="vertical" >
 
     <Button
-        android:id="@+id/registr_in_back"
+        android:id="@+id/register_in_back"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="12dp"
         android:background="@drawable/title_back_button_gray"

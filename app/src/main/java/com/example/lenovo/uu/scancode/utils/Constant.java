@@ -1,8 +1,5 @@
 package com.example.lenovo.uu.scancode.utils;
 
-/**
- * Created by 刘红亮 on 2015/9/24 14:08.
- */
 public interface Constant {
     /**
      * 二维码请求的type

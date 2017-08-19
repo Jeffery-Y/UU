@@ -43,7 +43,6 @@ public class MyMessageReceiver extends BroadcastReceiver {
 	BmobUserManager userManager;
 	BmobChatUser currentUser;
 
-	//如果你想发送自定义格式的消息，请使用sendJsonMessage方法来发送Json格式的字符串，然后你按照格式自己解析并处理
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {

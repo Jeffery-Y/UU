@@ -107,7 +107,8 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
         <activity
             android:name=".ui.SplashActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -122,20 +123,24 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity android:name=".ui.LocationActivity" />
         <activity android:name=".ui.BlackListActivity" />
-        <activity android:name=".ui.ImageBrowserActivity" />
+        <activity android:name=".ui.ImageBrowserActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
             android:name=".ui.AddFriendActivity"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity android:name=".ui.NewFriendActivity" />
-        <activity android:name=".ui.NearPeopleActivity" />
+        <activity android:name=".ui.NearPeopleActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
         <activity android:name=".ui.UpdateInfoActivity" />
         <activity android:name=".ui.MyTwoCodeActivity" />
-        <activity android:name=".ui.CommonScanActivity" />
+        <activity android:name=".ui.CommonScanActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
             android:name=".ui.ChatActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
         <activity android:name=".ui.SetMyInfoActivity" />
-        <activity android:name=".ui.UpdateInPhone" />
+        <activity android:name=".ui.UpdateInPhone"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
             android:name=".ui.RegisterInPhone"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"

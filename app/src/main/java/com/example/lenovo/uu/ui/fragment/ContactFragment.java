@@ -113,6 +113,7 @@ public class ContactFragment extends FragmentBase implements OnItemClickListener
 
 	private void initEditText() {
 		mClearEditText = (ClearEditText)findViewById(R.id.et_msg_search);
+		mClearEditText.setCursorVisible(false);
 		// 根据输入框输入值的改变来过滤搜索
 		mClearEditText.addTextChangedListener(new TextWatcher() {
 
@@ -148,8 +149,9 @@ public class ContactFragment extends FragmentBase implements OnItemClickListener
 			for (User sortModel : friends) {
 				String name = sortModel.getUsername();
 				if (name != null) {
-					if (name.indexOf(filterStr.toString()) != -1 ||
-							characterParser.getSelling(name).contains(filterStr.toString())) {
+					if (name.indexOf(characterParser.getSelling(filterStr.toString())) != -1 ||
+							name.indexOf(filterStr.toString()) != -1||
+							characterParser.getSelling(name).contains(characterParser.getSelling(filterStr.toString()))) {
 						filterDateList.add(sortModel);
 					}
 				}

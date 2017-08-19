@@ -41,7 +41,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/base_action_bar_height"
                 android:background="@color/transparent"
-                android:hint="@string/login_username_hint"
+                android:hint="@string/login_user_hint"
                 android:paddingLeft="15dip"
                 android:textColorHint="#ffffffff" />
 

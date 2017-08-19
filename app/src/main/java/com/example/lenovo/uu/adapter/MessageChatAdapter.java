@@ -61,25 +61,14 @@ public class MessageChatAdapter extends BaseListAdapter<BmobMsg> {
 
 	// 语音合成对象
 	private SpeechSynthesizer mTts;
-
 	// 默认发音人
 	private String voicer = "xiaoyan";
-
-	private String[] mCloudVoicersEntries;
-	private String[] mCloudVoicersValue ;
-
 	// 缓冲进度
 	private int mPercentForBuffering = 0;
 	// 播放进度
 	private int mPercentForPlaying = 0;
-
-	// 云端/本地单选按钮
-//	private RadioGroup mRadioGroup;
 	// 引擎类型
 	private String mEngineType = SpeechConstant.TYPE_CLOUD;
-	// 语记安装助手类
-//	ApkInstaller mInstaller ;
-
 	private Toast mToast;
 
 	//8种Item的类型
@@ -112,8 +101,8 @@ public class MessageChatAdapter extends BaseListAdapter<BmobMsg> {
 		// 初始化合成对象
 		mTts = SpeechSynthesizer.createSynthesizer(mContext, mTtsInitListener);
 		mToast = Toast.makeText(mContext,"",Toast.LENGTH_SHORT);
-//设置播放器音频流类型
-//		mTts.setParameter(SpeechConstant.STREAM_TYPE, mSharedPreferences.getString("stream_preference", "3"));
+		//设置播放器音频流类型
+		mTts.setParameter(SpeechConstant.STREAM_TYPE, "3");
 		// 设置播放合成音频打断音乐播放，默认为true
 		mTts.setParameter(SpeechConstant.KEY_REQUEST_FOCUS, "true");
 
@@ -193,33 +182,7 @@ public class MessageChatAdapter extends BaseListAdapter<BmobMsg> {
 		final TextView tv_send_status = ViewHolder.get(convertView, R.id.tv_send_status);//发送状态
 		TextView tv_time = ViewHolder.get(convertView, R.id.tv_time);
 		final TextView tv_message = ViewHolder.get(convertView, R.id.tv_message);
-		tv_message.setOnClickListener(new OnClickListener() {
 
-			public void onClick(View v) {
-				if( null == mTts ){
-					// 创建单例失败，与 21001 错误为同样原因，参考 http://bbs.xfyun.cn/forum.php?mod=viewthread&tid=9688
-					ShowToast( "创建对象失败，请确认 libmsc.so 放置正确，且有调用 createUtility 进行初始化" );
-					return;
-				}
-				if(mTts.isSpeaking()){
-					//停止
-					mTts.stopSpeaking();
-				} else {
-					// 移动数据分析，收集开始合成事件
-					FlowerCollector.onEvent(mContext, "tts_play");
-
-					String text = ((TextView) tv_message).getText().toString();
-					int code = mTts.startSpeaking(text, mTtsListener);
-//			/**
-//			 * 只保存音频不进行播放接口,调用此接口请注释startSpeaking接口
-//			 * text:要合成的文本，uri:需要保存的音频全路径，listener:回调接口
-//			*/
-//			String path = Environment.getExternalStorageDirectory()+"/tts.pcm";
-//			int code = mTts.synthesizeToUri(text, path, mTtsListener);
-					if (code != ErrorCode.SUCCESS)ShowToast("语音合成失败,错误码: " + code);
-				}
-			}
-		});
 		//图片
 		ImageView iv_picture = ViewHolder.get(convertView, R.id.iv_picture);
 		final ProgressBar progress_load = ViewHolder.get(convertView, R.id.progress_load);//进度条
@@ -308,6 +271,27 @@ public class MessageChatAdapter extends BaseListAdapter<BmobMsg> {
 				SpannableString spannableString = FaceTextUtils
 						.toSpannableString(mContext, text);
 				tv_message.setText(spannableString);
+				tv_message.setOnClickListener(new OnClickListener() {
+
+					public void onClick(View v) {
+						if( null == mTts ){
+							// 创建单例失败，与 21001 错误为同样原因，参考 http://bbs.xfyun.cn/forum.php?mod=viewthread&tid=9688
+							ShowToast( "创建对象失败，请确认 libmsc.so 放置正确，且有调用 createUtility 进行初始化" );
+							return;
+						}
+						if(mTts.isSpeaking()){
+							//停止
+							mTts.stopSpeaking();
+						} else {
+							// 移动数据分析，收集开始合成事件
+							FlowerCollector.onEvent(mContext, "tts_play");
+
+							String text = ((TextView) tv_message).getText().toString();
+							int code = mTts.startSpeaking(text, mTtsListener);
+							if (code != ErrorCode.SUCCESS)ShowToast("语音合成失败,错误码: " + code);
+						}
+					}
+				});
 			} catch (Exception e) {
 			}
 			break;
@@ -434,9 +418,8 @@ public class MessageChatAdapter extends BaseListAdapter<BmobMsg> {
 			if (code != ErrorCode.SUCCESS) {
 				ShowToast("初始化失败,错误码："+code);
 			} else {
-				// 初始化成功，之后可以调用startSpeaking方法
-				// 注：有的开发者在onCreate方法中创建完合成对象之后马上就调用startSpeaking进行合成，
-				// 正确的做法是将onCreate中的startSpeaking调用移至这里
+				// 初始化成功
+				// startSpeaking
 			}
 		}
 	};
