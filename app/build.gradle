@@ -28,6 +28,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile 'org.litepal.android:core:1.5.1'
 
     compile files('libs/Msc.jar')
     compile files('libs/Sunflower.jar')

@@ -131,7 +131,7 @@ public class UpdateInPhone extends ActivityBase implements OnClickListener{
 						@Override
 						public void done(Integer smsId, BmobException ex) {
 							if(ex == null){
-								toast("send ok " + smsId);
+								toast("验证码发送成功");
 								UpdateInPhone.this.smsId = smsId;
 //								et_smsid.setText(smsId+"");
 								Log.e("demo", ""+smsId);
@@ -201,7 +201,7 @@ public class UpdateInPhone extends ActivityBase implements OnClickListener{
 					public void done(BmobException ex) {
 						progress.dismiss();
 						if(ex == null){
-							toast("verify ok ");
+							toast("验证成功！");
 							if(bind_or_cancel){
 								updateInPhone();
 							} else {
@@ -276,6 +276,7 @@ public class UpdateInPhone extends ActivityBase implements OnClickListener{
 		}
 		@Override
 		public void onFinish() {
+			super.cancel();
 			btn_send_ver_message.setText("发送验证码");
 			btn_send_ver_message.setEnabled(true);
 		}

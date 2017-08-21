@@ -92,13 +92,15 @@ public class RecentFragment extends FragmentBase implements OnItemClickListener,
 						if (name != null) {
 							if (name.indexOf(characterParser.getSelling(filterStr.toString())) != -1 ||
 									name.indexOf(filterStr.toString()) != -1||
-									characterParser.getSelling(name).contains(characterParser.getSelling(filterStr.toString()))) {
+									characterParser.getSelling(name).contains(
+											characterParser.getSelling(filterStr.toString()))) {
 								adapter.add(item);
 							}
 						}
 					}
 				} else {
-					adapter = new MessageRecentAdapter(getActivity(), R.layout.item_conversation, BmobDB.create(getActivity()).queryRecents());
+					adapter = new MessageRecentAdapter(getActivity(), R.layout.item_conversation
+							, BmobDB.create(getActivity()).queryRecents());
 				}
 				listview.setAdapter(adapter);
 			}

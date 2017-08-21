@@ -265,6 +265,7 @@ public class RegisterInPhone extends BaseActivity implements OnClickListener{
 		}
 		@Override
 		public void onFinish() {
+            super.cancel();
 			btn_send_ver_message.setText("发送验证码");
 			btn_send_ver_message.setEnabled(true);
 		}

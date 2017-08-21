@@ -56,7 +56,7 @@ public class ResetPassword extends BaseActivity implements View.OnClickListener{
             et_old_password = (EditText)findViewById(R.id.et_old_password);
             et_old_password.requestFocus();
         } else if(from != null && from.equals("verified_phone")){
-            re_et_password.requestFocus();
+            et_password.requestFocus();
         }
 
         btn_register = (Button) findViewById(R.id.btn_register);
@@ -88,11 +88,11 @@ public class ResetPassword extends BaseActivity implements View.OnClickListener{
             String in_ole_password = et_old_password.getText().toString();
             String user_old_password = user.getPassword();
             if (TextUtils.isEmpty(in_ole_password)) {
-                ShowToast(R.string.toast_error_password_null);
+                ShowToast("旧密码不能为空！");
                 return;
             }
             if (TextUtils.isEmpty(user_old_password)) {
-                ShowToast("查询该用户失败！");
+                ShowToast("获取该用户账号信息失败！");
                 return;
             }
             if(!in_ole_password.equals(user_old_password)){

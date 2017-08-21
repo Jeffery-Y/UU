@@ -96,7 +96,7 @@
             android:layout_height="35dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:background="@drawable/skin_aio_panel_ptt_nor"
+            android:background="@drawable/btn_chat_voice_selector2"
             android:gravity="center"
             android:textColor="@color/base_color_text_black" >
         </Button>

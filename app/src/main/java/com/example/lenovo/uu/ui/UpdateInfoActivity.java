@@ -70,7 +70,8 @@ public class UpdateInfoActivity extends ActivityBase {
 			public void onSuccess() {
 				// TODO Auto-generated method stub
 				final User u = userManager.getCurrentUser(User.class);
-				ShowToast("修改" + name_update_object + "成功:" +u.getEmail());
+				ShowToast("修改" + name_update_object + "成功:"
+						+ (name_update_object.equals("邮箱") ? u.getEmail() : u.getUsername()));
 				finish();
 			}
 

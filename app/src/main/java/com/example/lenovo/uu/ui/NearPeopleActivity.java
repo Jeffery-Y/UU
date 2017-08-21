@@ -64,7 +64,7 @@ public class NearPeopleActivity extends ActivityBase implements IXListViewListen
 		switch (v.getId()){
 			case R.id.near_gender:
 				near_gender_select = !near_gender_select;
-				near_gender.setText(near_gender_select ? "男◢" : "女◢");
+				near_gender.setText(near_gender_select ? "性别: 男◢" : "性别: 女◢");
 				initNearByList(true);
 				break;
 			case R.id.near_include_friends:

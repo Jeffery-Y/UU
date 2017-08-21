@@ -12,7 +12,7 @@
     <dimen name="register_margin_rl">25.0dp</dimen>
     <dimen name="register_view_margin">25.0dp</dimen>
     <dimen name="register_edit_margin">15.0dp</dimen>
-    <dimen name="near_line_uad_margin">6.0dp</dimen>
+    <dimen name="near_line_uad_margin">7.0dp</dimen>
     <dimen name="chat_add_btn_margin">20.0dp</dimen>
     <dimen name="base_scrollview_top_height">50.0dip</dimen>
     <dimen name="tab_padding_top_bottom">15dp</dimen>

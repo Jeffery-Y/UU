@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-/** 首选项管理 */
+/** 通知管理 */
 @SuppressLint("CommitPrefEdits")
 public class SharePreferenceUtil {
 	private SharedPreferences mSharedPreferences;
