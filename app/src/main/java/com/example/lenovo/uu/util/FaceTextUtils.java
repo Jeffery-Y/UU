@@ -19,7 +19,7 @@ public class FaceTextUtils {
 
 	public static List<FaceText> faceTexts = new ArrayList<FaceText>();
 	static {
-		for (int i = 100; i < 540; ++i){
+		for (int i = 100; i < 545; ++i){
 			faceTexts.add(new FaceText("\\ue" + Integer.toString(i)));
 		}
 	}

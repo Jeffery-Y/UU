@@ -32,7 +32,7 @@ import static java.security.AccessController.getContext;
  */
 public class LoginActivity extends BaseActivity implements OnClickListener {
 
-	int i = 0;
+	int wrapper_change = 1;
 	static final int wrapper[] = {R.drawable.background1, R.drawable.background2, R.drawable.background3
 			, R.drawable.background4, R.drawable.background5};
 	RelativeLayout login_layout;
@@ -88,8 +88,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		switch (v.getId()){
 			case R.id.iv_icon:
 				login_layout.setBackground(LoginActivity.this.getResources()
-						.getDrawable(wrapper[i]));
-				i = (i + 1) % 5;
+						.getDrawable(wrapper[wrapper_change]));
+				wrapper_change = (wrapper_change + 1) % 5;
 				break;
 			case R.id.btn_register:
 				Intent intent = new Intent(LoginActivity.this,	RegisterInPhone.class);
