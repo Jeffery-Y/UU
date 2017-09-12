@@ -30,3 +30,45 @@
  * 语音消息的录制和播放
  * 地理位置的发送和查看
  * 支持小表情/本地图片/拍摄图片的查看
+
+界面截图展示
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/启动页.jpg)
+
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/注册 (2).jpg)
+
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/注册 (3).jpg)
+
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/登陆页.jpg)
+
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/最近消息.jpg)
+
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/我的好友页面.jpg)
+
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/设置页面.jpg)
+
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/聊天界面.jpg)
+
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/个人资料页.jpg)
+
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/附近的人.jpg)
+
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/语音识别.jpg)
+
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/语音播报消息.jpg)
+
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/语音.jpg)
+
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/修改密码.jpg)
+
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/搜索好友.jpg)
+
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/黑名单添加.jpg)
+
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/非好友用户详细资料页.jpg)
+
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/二维码.jpg)
+
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/二维码扫描.jpg)
+
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/地图.jpg)
+
