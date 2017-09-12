@@ -34,9 +34,9 @@
 界面截图展示
 ![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/启动页.jpg)
 
-![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/注册 (2).jpg)
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/手机号码验证.jpg)
 
-![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/注册 (3).jpg)
+![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/注册.jpg)
 
 ![image](https://github.com/Jeffery-Y/UU/raw/master/screenshots/登陆页.jpg)
 
